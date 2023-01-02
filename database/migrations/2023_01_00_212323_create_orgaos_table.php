@@ -1,0 +1,41 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('orgaos', function (Blueprint $table) {
+            $table->id();
+            $table->unsignedInteger('ext_id')->unique();
+            $table->string('nome');
+            $table->index('nome');
+            $table->string('sigla');
+            $table->string('url');
+            $table->string('uuid_logo');
+            $table->string('orgao_regiao'); // VEM DA REQUISIÇÃO EDITAIS
+            $table->string('orgao_uuid'); // VEM DA REQUISIÇÃO EDITAIS
+            $table->string('caminho_logotipo_orgao'); // VEM DAS QUESTÕES
+            $table->text('descricao');           
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('orgaos');
+    }
+};
