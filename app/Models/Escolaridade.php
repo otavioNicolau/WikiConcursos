@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Escolaridade extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'ext_id', 'nome', 'descricao'
+    ];
 }

@@ -30,6 +30,6 @@ class Escolaridades implements ShouldQueue
      */
     public function handle()
     {
-        //
+        echo "tudo certo";
     }
 }

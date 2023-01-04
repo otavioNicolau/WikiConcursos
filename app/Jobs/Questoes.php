@@ -30,6 +30,6 @@ class Questoes implements ShouldQueue
      */
     public function handle()
     {
-        //
+        echo "tudo certo";
     }
 }

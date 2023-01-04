@@ -19,4 +19,9 @@ class Assunto extends Model
         'descendentes',
         'descricao',
     ];
+
+    public function materia()
+    {
+        return $this->belongsTo('App\Materia', 'materia_id', 'ext_id');
+    }
 }

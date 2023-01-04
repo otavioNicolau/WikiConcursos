@@ -30,6 +30,6 @@ class Editais implements ShouldQueue
      */
     public function handle()
     {
-        //
+        echo "tudo certo";
     }
 }

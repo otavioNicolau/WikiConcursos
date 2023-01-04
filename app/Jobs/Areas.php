@@ -30,6 +30,6 @@ class Areas implements ShouldQueue
      */
     public function handle()
     {
-        //
+        echo "tudo certo";
     }
 }

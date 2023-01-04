@@ -26,8 +26,7 @@ return new class extends Migration
             $table->string('nome_completo');
             $table->string('url_concurso'); 
             $table->string('area'); // vem da questão
-            $table->timestamps();    
-           
+            $table->timestamps(); 
 
         });
     }

@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Cargo extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'ext_id', 'nome', 'tipo', 'descendentes_de', 'title'
+    ];
 }

@@ -30,6 +30,6 @@ class Assuntos implements ShouldQueue
      */
     public function handle()
     {
-        //
+        echo "tudo certo";
     }
 }

@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Banca extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'ext_id', 'nome', 'sigla', 'url', 'descricao'
+    ];
 }
