@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('nome');
             $table->unsignedBigInteger('materia_id');
             $table->string('hierarquia');
-            $table->string('descendentes');
-            $table->text('descricao');
+            $table->text('descendentes');
+            $table->string('descricao')->nullable();
             $table->timestamps();
         });
     }

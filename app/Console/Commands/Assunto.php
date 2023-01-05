@@ -6,6 +6,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Console\Command;
 
 use App\Jobs\Assuntos;
+use App\Models\Materia;
 
 class Assunto extends Command
 {
@@ -40,7 +41,16 @@ class Assunto extends Command
 
     public function handle()
     {
-        //return Command::SUCCESS;
-        $this->dispatch(new Assuntos);
+
+        $materias = Materia::all();
+
+        foreach ($materias as $materia) {
+            $this->dispatch(
+                new Assuntos(
+                    "https://www.tecconcursos.com.br/api/assuntos",
+                    $materia->id
+                )
+            );
+        }
     }
 }

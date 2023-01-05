@@ -38,6 +38,6 @@ class Orgao extends Command
 
     public function handle()
     {
-        $this->dispatch(new Orgaos);
+        $this->dispatch(new Orgaos("https://www.tecconcursos.com.br/api/orgaos/busca-rapida", 1));
     }
 }

@@ -20,11 +20,11 @@ return new class extends Migration
             $table->index('nome');
             $table->string('sigla');
             $table->string('url');
-            $table->string('uuid_logo');
-            $table->string('orgao_regiao'); // VEM DA REQUISIÇÃO EDITAIS
-            $table->string('orgao_uuid'); // VEM DA REQUISIÇÃO EDITAIS
-            $table->string('caminho_logotipo_orgao'); // VEM DAS QUESTÕES
-            $table->text('descricao');           
+            $table->text('uuid_logo');
+            $table->string('orgao_regiao')->nullable(); // VEM DA REQUISIÇÃO EDITAIS
+           // $table->text('orgao_uuid')->nullable(); // VEM DA REQUISIÇÃO EDITAIS
+           // $table->string('caminho_logotipo_orgao')->nullable(); // VEM DAS QUESTÕES
+            $table->string('descricao')->nullable();
             $table->timestamps();
         });
     }

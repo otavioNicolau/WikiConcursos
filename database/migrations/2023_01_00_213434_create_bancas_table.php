@@ -20,7 +20,7 @@ return new class extends Migration
             $table->index('nome');
             $table->string('sigla');
             $table->string('url');
-            $table->text('descricao');
+            $table->string('descricao')->nullable();
             $table->timestamps();            
         });
     }

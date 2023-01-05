@@ -38,6 +38,12 @@ class Materia extends Command
 
     public function handle()
     {
-        $this->dispatch(new Materias);
+
+        $this->dispatch(
+            new Materias(
+                "https://www.tecconcursos.com.br/api/materias/busca-rapida",
+                1
+            )
+        );
     }
 }
