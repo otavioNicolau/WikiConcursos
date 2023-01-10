@@ -39,6 +39,6 @@ class Area extends Command
 
     public function handle()
     {
-        $this->dispatch(new Areas);
+        $this->dispatch(new Areas("https://www.tecconcursos.com.br/api/enums/areas"));
     }
 }

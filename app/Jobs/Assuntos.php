@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Jobs;
-
 use App\Models\Assunto;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
@@ -12,10 +11,12 @@ use Illuminate\Queue\SerializesModels;
 
 class Assuntos implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
 
     protected $url;
     protected $materiaID;
+    public $tries = 0;
+
 
     public function __construct($url, $materiaID)
     {

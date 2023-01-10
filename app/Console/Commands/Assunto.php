@@ -48,7 +48,7 @@ class Assunto extends Command
             $this->dispatch(
                 new Assuntos(
                     "https://www.tecconcursos.com.br/api/assuntos",
-                    $materia->id
+                    $materia->ext_id
                 )
             );
         }

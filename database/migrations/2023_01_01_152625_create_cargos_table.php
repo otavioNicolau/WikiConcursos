@@ -16,10 +16,11 @@ return new class extends Migration
         Schema::create('cargos', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('ext_id')->unique();
+            $table->unsignedInteger('orgao_id');
             $table->string('nome');
             $table->string('tipo');
-            $table->string('descendentes_de');
-            $table->string('title');
+            $table->string('descendentes_de')->nullable();
+            $table->string('title')->nullable();
             $table->timestamps();
         });
     }

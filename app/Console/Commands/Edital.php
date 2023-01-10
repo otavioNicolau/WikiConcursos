@@ -38,6 +38,8 @@ class Edital extends Command
 
     public function handle()
     {
-        $this->dispatch(new Editais);
+        $this->dispatch(
+            new Editais("https://www.tecconcursos.com.br/api/concursos/buscas/rapida", 1)
+        );
     }
 }

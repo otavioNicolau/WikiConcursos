@@ -2,34 +2,68 @@
 
 namespace App\Jobs;
 
+use App\Models\Area;
+use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class Areas implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
 
-    /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
+    protected $url;
+    public $tries = 0;
+
+
+    public function __construct($url)
     {
-        //
+        $this->url = $url;
     }
 
-    /**
-     * Execute the job.
-     *
-     * @return void
-     */
     public function handle()
     {
-        echo "tudo certo";
+        try {
+            $client = new Client();
+            $response = $client->get($this->url, []);
+
+            $statusCode = $response->getStatusCode();
+
+            if ($statusCode == 200) {
+
+                $data = json_decode($response->getBody(), true);
+                $areas = $data['areas'];
+
+                foreach ($areas as $area) {
+                    $this->updateOrCreateArea($area);
+                }
+            }
+        } catch (\Exception $e) {
+            $this->job->fail($e);
+            echo $e->getMessage() . PHP_EOL;
+        }
+    }
+
+    protected function updateOrCreateArea($area)
+    {
+        $areaModel = Area::where('ext_id', $area['id'])->first();
+
+        if ($areaModel) {
+            $areaModel->nome = $area['nome'];
+            $areaModel->hierarquia = $area['hierarquia'];
+            $areaModel->save();
+            echo "Area - {$area['nome']} Atualizada com Sucesso!" . PHP_EOL;
+        } else {
+            Area::create([
+                'ext_id' => $area['id'],
+                'nome' => $area['nome'],
+                'hierarquia' => $area['hierarquia'],
+            ]);
+            echo "Area - {$area['nome']} Foi Criada com sucesso" . PHP_EOL;
+        }
     }
 }
+

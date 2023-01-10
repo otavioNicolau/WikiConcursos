@@ -8,19 +8,35 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
+use romanzipp\QueueMonitor\Traits\IsMonitored;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
+use Illuminate\Http\Response;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
+use PhpParser\Node\Stmt\Echo_;
 
 class Orgaos implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
 
     protected $url;
     protected $num;
+    public $tries = 0;
 
     public function __construct($url, $num)
     {
         $this->url = $url;
         $this->num = $num;
+    }
+
+    public function middleware()
+    {
+        return [
+            new RateLimited('orgaos')
+        ];
     }
 
     public function handle()
@@ -37,10 +53,20 @@ class Orgaos implements ShouldQueue
             $statusCode = $response->getStatusCode();
 
             if ($statusCode == 200) {
+
+
                 $data = json_decode($response->getBody(), true);
                 $list = $data['list'];
 
                 foreach ($list as $orgao) {
+
+                    if (!empty($orgao['uuidLogo'])) {
+                        $this->downloadFile(
+                            "https://s3-sa-east-1.amazonaws.com/figuras.tecconcursos.com.br/" . $orgao['uuidLogo'],
+                            "orgaos"
+                        );
+                    }
+
                     $this->updateOrCreateOrgao($orgao);
                 }
             }
@@ -53,6 +79,7 @@ class Orgaos implements ShouldQueue
                 }
             }
         } catch (\Exception $e) {
+            $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;
         }
     }
@@ -66,8 +93,8 @@ class Orgaos implements ShouldQueue
             $orgaoModel->sigla = $orgao['sigla'];
             $orgaoModel->url = $orgao['url'];
             $orgaoModel->uuid_logo = $orgao['uuidLogo'];
-            $orgaoModel->orgao_regiao = $orgao['orgao_regiao'];
-            $orgaoModel->orgao_uuid = $orgao['orgao_uuid'];
+            //$orgaoModel->orgao_regiao = $orgao['orgao_regiao'];
+            //$orgaoModel->orgao_uuid = $orgao['orgao_uuid'];
             // $orgaoModel->caminho_logotipo_orgao = $orgao['caminho_logotipo_orgao'];
             $orgaoModel->save();
             echo "Orgão - {$orgao['nome']} Atualizado com Sucesso!" . PHP_EOL;
@@ -83,6 +110,55 @@ class Orgaos implements ShouldQueue
                 //'caminho_logotipo_orgao' => $orgao['caminho_logotipo_orgao'],
             ]);
             echo "Orgão - {$orgao['nome']} Foi Criada com sucesso" . PHP_EOL;
+        }
+    }
+
+
+    protected function downloadFile($file_url, $path)
+    {
+
+        try {
+            $client = new Client();
+            $response = $client->get($file_url, []);
+
+            if ($response->getStatusCode() == 200) {
+
+                $fileContents = $response->getBody()->getContents();
+                $fileLengthWeb = $response->getHeader('Content-Length');
+                $fileType = $response->getHeader('Content-Type');
+
+                $extension = '';
+                if ($fileType[0] == "application/pdf") {
+                    $extension = ".pdf";
+                } else if ($fileType[0] == "image/jpeg" || $fileType[0] == "image/pjpeg" || $fileType[0] == "image/jpeg" || $fileType[0] == "image/pjpeg") {
+                    $extension = ".jpg";
+                } else if ($fileType[0] == "image/png") {
+                    $extension = ".png";
+                } else if ($fileType == "image/gif") {
+                    $extension = ".gif";
+                } else if ($fileType[0] == "application/zip") {
+                    $extension = ".zip";
+                } else if ($fileType[0] == "application/x-rar-compressed") {
+                    $extension = ".rar";
+                } else if ($fileType[0] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                    $extension = ".docx";
+                } else if ($fileType[0] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+                    $extension = ".xlsx";
+                } else if ($fileType[0] == "application/vnd.openxmlformats-officedocument.presentationml.presentation") {
+                    $extension = ".pptx";
+                } else {
+                    $extension = ".jpg";
+                }
+
+                $fileName = basename($file_url) . $extension;
+
+                if (!Storage::exists($path . "/" . $fileName) || Storage::size($path . "/" . $fileName) !=  $fileLengthWeb[0]) {
+                    Storage::disk('local')->put($path . "/" . $fileName, $fileContents);
+                }
+            }
+        } catch (\Exception $e) {
+            $this->job->fail($e);
+            echo $e->getMessage() . PHP_EOL;
         }
     }
 }

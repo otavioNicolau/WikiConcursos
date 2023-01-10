@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Jobs;
-
 use App\Models\Materia;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
@@ -9,13 +8,16 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class Materias implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
 
     protected $url;
     protected $num;
+    public $tries = 0;
+
 
     public function __construct($url, $num)
     {
@@ -53,6 +55,7 @@ class Materias implements ShouldQueue
                 }
             }
         } catch (\Exception $e) {
+            $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;
         }
     }

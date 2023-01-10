@@ -17,15 +17,15 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('ext_id')->unique();
             $table->unsignedInteger('edital_id');
-            $table->dateTime('data_aplicacao');
-            $table->string('escolaridade_enum');
-            $table->string('arquivo_gabarito');
-            $table->string('arquivo_discursiva');
-            $table->string('arquivo_objetiva');
-            $table->string('arquivo_edital'); // analisar (duplicidade)
-            $table->string('nome_completo');
-            $table->string('url_concurso'); 
-            $table->string('area'); // vem da questão
+            $table->dateTime('data_aplicacao')->nullable();
+            $table->string('escolaridade_enum')->nullable();
+            $table->string('arquivo_gabarito')->nullable();
+            $table->string('arquivo_discursiva')->nullable();
+            $table->string('arquivo_objetiva')->nullable();
+            $table->string('arquivo_edital')->nullable();
+            $table->string('nome_completo')->nullable();
+            $table->string('url_concurso')->nullable();
+            $table->string('area')->nullable(); // vem da questão
             $table->timestamps(); 
 
         });

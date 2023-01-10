@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\Cargos;
+use App\Models\Orgao;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
@@ -38,6 +39,15 @@ class Cargo extends Command
 
     public function handle()
     {
-        $this->dispatch(new Cargos);
+        $orgaos = Orgao::all();
+
+        foreach ($orgaos as $orgao) {
+            $this->dispatch(
+                new Cargos(
+                    "https://www.tecconcursos.com.br/api/cargos",
+                    $orgao->ext_id
+                )
+            );
+        }
     }
 }

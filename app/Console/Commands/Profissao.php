@@ -8,7 +8,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 
 class Profissao extends Command
 {
-      /**
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -38,6 +38,8 @@ class Profissao extends Command
 
     public function handle()
     {
-        $this->dispatch(new Profissoes);
+        $this->dispatch(
+            new Profissoes("https://www.tecconcursos.com.br/api/concursos/busca-avancada/profissoes")
+        );
     }
 }

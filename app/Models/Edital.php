@@ -9,6 +9,8 @@ class Edital extends Model
 {
     use HasFactory;
 
+    protected $table = 'editais';
+
     protected $fillable = [
         'ext_id', 'nome', 'id_banca', 'id_orgao', 'prazo_inscricao', 'ano', 'id_arquivo', 'data_inclusao',
         'possui_guia', 'vagas', 'salario_inicial_de', 'salario_inicial_ate', 'taxa_inscricao_de', 'taxa_inscricao_ate',
@@ -23,5 +25,10 @@ class Edital extends Model
     public function orgao()
     {
         return $this->belongsTo('App\Orgao', 'id_orgao', 'ext_id');
+    }
+
+    public function concursos()
+    {
+        return $this->hasMany('App\Concurso', 'edital_id','ext_id');
     }
 }

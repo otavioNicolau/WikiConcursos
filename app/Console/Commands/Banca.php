@@ -38,6 +38,9 @@ class Banca extends Command
 
     public function handle()
     {
-        $this->dispatch(new Bancas("https://www.tecconcursos.com.br/api/bancas"));
+        $this->dispatch(
+            new Bancas("https://www.tecconcursos.com.br/api/bancas")
+
+        );
     }
 }

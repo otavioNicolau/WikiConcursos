@@ -9,6 +9,8 @@ class Profissao extends Model
 {
     use HasFactory;
 
+    protected $table = 'profissoes';
+
     protected $fillable = [
         'ext_id', 'nome', 'descricao'
     ];

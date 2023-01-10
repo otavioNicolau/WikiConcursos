@@ -20,7 +20,6 @@ Route::get('/', function () {
 
 
 
-Route::get('/api', function () {
-
-   
+Route::prefix('/jobs')->group(function () {
+    Route::queueMonitor();
 });

@@ -13,6 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
+        /*
         Schema::table('comentarios', function (Blueprint $table) {
             $table->foreign('id_questao')->references('ext_id')->on('questoes')->onDelete('cascade');
         });
@@ -37,6 +38,7 @@ return new class extends Migration
         Schema::table('alternativas', function (Blueprint $table) {
             $table->foreign('id_questao')->references('ext_id')->on('questoes')->onDelete('cascade');
         });
+        */
     }
 
     /**
@@ -46,6 +48,7 @@ return new class extends Migration
      */
     public function down()
     {
+        /*
         Schema::table('comentarios', function (Blueprint $table) {
             $table->dropForeign(['id_questao']);
         });
@@ -70,5 +73,7 @@ return new class extends Migration
         Schema::table('alternativas', function (Blueprint $table) {
             $table->dropForeign(['id_questao']);
         });
+
+        */
     }
 };

@@ -38,6 +38,8 @@ class Escolaridade extends Command
 
     public function handle()
     {
-        $this->dispatch(new Escolaridades);
+        $this->dispatch(
+            new Escolaridades("https://www.tecconcursos.com.br/api/enums/escolaridades")
+        );
     }
 }
