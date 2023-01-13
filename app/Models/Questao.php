@@ -9,6 +9,8 @@ class Questao extends Model
 {
     use HasFactory;
 
+    protected $table = 'questoes';
+
     protected $fillable = [
         'ext_id', 'id_materia', 'id_assunto', 'id_cargo', 'concurso_id', 'numero_questao_atual', 'enunciado',
         'correcao_questao', 'numero_alternativa_correta', 'possui_comentario', 'anulada', 'tipo_questao', 'desatualizada',
