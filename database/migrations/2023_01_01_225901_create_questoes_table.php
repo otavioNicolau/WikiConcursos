@@ -34,7 +34,7 @@ return new class extends Migration
             $table->boolean('desatualizada_com_gabarito_preliminar');
             $table->boolean('desatualizada_com_gabarito_definivo');
             $table->boolean('questao_oculta');
-            $table->dateTime('data_publicacao');
+            $table->string('data_publicacao');
             $table->timestamps();
 
 

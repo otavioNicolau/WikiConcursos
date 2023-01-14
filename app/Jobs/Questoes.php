@@ -20,7 +20,7 @@ class Questoes implements ShouldQueue
     protected $url;
     protected $data;
     protected $headers;
-    public $tries = 0;
+ //   public $tries = 0;
 
 
     public function __construct($url, $data, $headers)
@@ -60,64 +60,59 @@ class Questoes implements ShouldQueue
 
 
 
-    protected function updateOrCreateQuestao($questoes)
+    protected function updateOrCreateQuestao($questao)
     {
 
         try {
-            $questaoModel = Questao::where('ext_id', $questoes['idQuestao'])->first();
+            $questaoModel = Questao::where('ext_id', $questao['idQuestao'])->first();
 
-            $data_atual = DateTime::createFromFormat('Y-m-d H:i:s',  $questoes['dataAtual']);
-            $data_atual = $data_atual->format('Y-m-d H:i:s');
-
-            $data_publicacao = DateTime::createFromFormat('Y-m-d H:i:s',  $questoes['dataPublicacao']);
-            $data_publicacao = $data_publicacao->format('Y-m-d H:i:s');
 
             if ($questaoModel) {
-                $questaoModel->id_materia = isset($questoes['idMateria']) ? $questoes['idMateria'] : null;
-                $questaoModel->capitulo = isset($questoes['capitulo']) ? $questoes['capitulo'] : null;
-                $questaoModel->id_assunto_anexo_capitulo = isset($questoes['idAssuntoAnexoCapitulo']) ? $questoes['idAssuntoAnexoCapitulo'] : null;
-                $questaoModel->concurso_id = isset($questoes['concursoId']) ? $questoes['concursoId'] : null;
-                $questaoModel->numero_questao_atual = isset($questoes['numeroQuestaoAtual']) ? $questoes['numeroQuestaoAtual'] : null;
-                $questaoModel->enunciado = $questoes['enunciado'];
-                $questaoModel->correcao_questao = isset($questoes['correcaoQuestao']) ? $questoes['correcaoQuestao'] : null;
-                $questaoModel->numero_alternativa_correta = isset($questoes['numeroAlternativaCorreta']) ? $questoes['numeroAlternativaCorreta'] : null;
-                $questaoModel->possui_comentario = isset($questoes['possuiComentario']) ? $questoes['possuiComentario'] : null;
-                $questaoModel->anulada = isset($questoes['anulada']) ? $questoes['anulada'] : null;
-                $questaoModel->tipo_questao = isset($questoes['tipoQuestao']) ? $questoes['tipoQuestao'] : null;
-                $questaoModel->desatualizada = isset($questoes['desatualizada']) ? $questoes['desatualizada'] : null;
-                $questaoModel->formato_questao = isset($questoes['formatoQuestao']) ? $questoes['formatoQuestao'] : null;
-                $questaoModel->data_atual = $data_atual;
-                $questaoModel->gabarito_preliminar = isset($questoes['gabaritoPreliminar']) ? $questoes['gabaritoPreliminar'] : null;
-                $questaoModel->desatualizada_com_gabarito_preliminar = isset($questoes['desatualizadaComGabaritoPreliminar']) ? $questoes['desatualizadaComGabaritoPreliminar'] : null;
-                $questaoModel->desatualizada_com_gabarito_definivo = isset($questoes['desatualizadaComGabaritoDefinivo']) ? $questoes['desatualizadaComGabaritoDefinivo'] : null;
-                $questaoModel->questao_oculta = isset($questoes['questaoOculta']) ? $questoes['questaoOculta'] : null;
-                $questaoModel->data_publicacao = $data_publicacao;
+                $questaoModel->id_materia = isset($questao['idMateria']) ? $questao['idMateria'] : null;
+                $questaoModel->capitulo = isset($questao['capitulo']) ? $questao['capitulo'] : null;
+                $questaoModel->id_assunto_anexo_capitulo = isset($questao['idAssuntoAnexoCapitulo']) ? $questao['idAssuntoAnexoCapitulo'] : null;
+                $questaoModel->concurso_id = isset($questao['concursoId']) ? $questao['concursoId'] : null;
+                $questaoModel->numero_questao_atual = isset($questao['numeroQuestaoAtual']) ? $questao['numeroQuestaoAtual'] : null;
+                $questaoModel->enunciado = $questao['enunciado'];
+                $questaoModel->correcao_questao = isset($questao['correcaoQuestao']) ? $questao['correcaoQuestao'] : null;
+                $questaoModel->numero_alternativa_correta = isset($questao['numeroAlternativaCorreta']) ? $questao['numeroAlternativaCorreta'] : null;
+                $questaoModel->possui_comentario = isset($questao['possuiComentario']) ? $questao['possuiComentario'] : null;
+                $questaoModel->anulada = isset($questao['anulada']) ? $questao['anulada'] : null;
+                $questaoModel->tipo_questao = isset($questao['tipoQuestao']) ? $questao['tipoQuestao'] : null;
+                $questaoModel->desatualizada = isset($questao['desatualizada']) ? $questao['desatualizada'] : null;
+                $questaoModel->formato_questao = isset($questao['formatoQuestao']) ? $questao['formatoQuestao'] : null;
+                $questaoModel->data_atual = $questao['dataAtual'];
+                $questaoModel->gabarito_preliminar = isset($questao['gabaritoPreliminar']) ? $questao['gabaritoPreliminar'] : null;
+                $questaoModel->desatualizada_com_gabarito_preliminar = isset($questao['desatualizadaComGabaritoPreliminar']) ? $questao['desatualizadaComGabaritoPreliminar'] : null;
+                $questaoModel->desatualizada_com_gabarito_definivo = isset($questao['desatualizadaComGabaritoDefinivo']) ? $questao['desatualizadaComGabaritoDefinivo'] : null;
+                $questaoModel->questao_oculta = isset($questao['questaoOculta']) ? $questao['questaoOculta'] : null;
+                $questaoModel->data_publicacao = $questao['dataPublicacao']['$'];
                 $questaoModel->save();
-                echo "QUESTOES - {$questoes['numeroQuestaoAtual']} Atualizada com Sucesso!" . PHP_EOL;
+                echo "QUESTOES - {$questao['numeroQuestaoAtual']} Atualizada com Sucesso!" . PHP_EOL;
             } else {
                 Questao::create([
-                    'ext_id' => $questoes['idQuestao'],
-                    'id_materia' => isset($questoes['idMateria']) ? $questoes['idMateria'] : null,
-                    'capitulo' => isset($questoes['capitulo']) ? $questoes['capitulo'] : null,
-                    'id_assunto_anexo_capitulo' => isset($questoes['idAssuntoAnexoCapitulo']) ? $questoes['idAssuntoAnexoCapitulo'] : null,
-                    'concurso_id' => isset($questoes['concursoId']) ? $questoes['concursoId'] : null,
-                    'numero_questao_atual' => isset($questoes['numeroQuestaoAtual']) ? $questoes['numeroQuestaoAtual'] : null,
-                    'enunciado' => isset($questoes['enunciado']) ? $questoes['enunciado'] : null,
-                    'correcao_questao' => isset($questoes['correcaoQuestao']) ? $questoes['correcaoQuestao'] : null,
-                    'numero_alternativa_correta' => isset($questoes['numeroAlternativaCorreta']) ? $questoes['numeroAlternativaCorreta'] : null,
-                    'possui_comentario' => isset($questoes['possuiComentario']) ? $questoes['possuiComentario'] : null,
-                    'anulada' => isset($questoes['anulada']) ? $questoes['anulada'] : null,
-                    'tipo_questao' => isset($questoes['tipoQuestao']) ? $questoes['tipoQuestao'] : null,
-                    'desatualizada' => isset($questoes['desatualizada']) ? $questoes['desatualizada'] : null,
-                    'formato_questao' => isset($questoes['formatoQuestao']) ? $questoes['formatoQuestao'] : null,
-                    'data_atual' => $data_atual,
-                    'gabarito_preliminar' => isset($questoes['gabaritoPreliminar']) ? $questoes['gabaritoPreliminar'] : null,
-                    'desatualizada_com_gabarito_preliminar' => isset($questoes['desatualizadaComGabaritoPreliminar']) ? $questoes['desatualizadaComGabaritoPreliminar'] : null,
-                    'desatualizada_com_gabarito_definivo' => isset($questoes['desatualizadaComGabaritoDefinivo']) ? $questoes['desatualizadaComGabaritoDefinivo'] : null,
-                    'questao_oculta' => isset($questoes['questaoOculta']) ? $questoes['questaoOculta'] : null,
-                    'data_publicacao' => $data_publicacao,
+                    'ext_id' => $questao['idQuestao'],
+                    'id_materia' => isset($questao['idMateria']) ? $questao['idMateria'] : null,
+                    'capitulo' => isset($questao['capitulo']) ? $questao['capitulo'] : null,
+                    'id_assunto_anexo_capitulo' => isset($questao['idAssuntoAnexoCapitulo']) ? $questao['idAssuntoAnexoCapitulo'] : null,
+                    'concurso_id' => isset($questao['concursoId']) ? $questao['concursoId'] : null,
+                    'numero_questao_atual' => isset($questao['numeroQuestaoAtual']) ? $questao['numeroQuestaoAtual'] : null,
+                    'enunciado' => isset($questao['enunciado']) ? $questao['enunciado'] : null,
+                    'correcao_questao' => isset($questao['correcaoQuestao']) ? $questao['correcaoQuestao'] : null,
+                    'numero_alternativa_correta' => isset($questao['numeroAlternativaCorreta']) ? $questao['numeroAlternativaCorreta'] : null,
+                    'possui_comentario' => isset($questao['possuiComentario']) ? $questao['possuiComentario'] : null,
+                    'anulada' => isset($questao['anulada']) ? $questao['anulada'] : null,
+                    'tipo_questao' => isset($questao['tipoQuestao']) ? $questao['tipoQuestao'] : null,
+                    'desatualizada' => isset($questao['desatualizada']) ? $questao['desatualizada'] : null,
+                    'formato_questao' => isset($questao['formatoQuestao']) ? $questao['formatoQuestao'] : null,
+                    'data_atual' =>  $questao['dataAtual'],
+                    'gabarito_preliminar' => isset($questao['gabaritoPreliminar']) ? $questao['gabaritoPreliminar'] : null,
+                    'desatualizada_com_gabarito_preliminar' => isset($questao['desatualizadaComGabaritoPreliminar']) ? $questao['desatualizadaComGabaritoPreliminar'] : null,
+                    'desatualizada_com_gabarito_definivo' => isset($questao['desatualizadaComGabaritoDefinivo']) ? $questao['desatualizadaComGabaritoDefinivo'] : null,
+                    'questao_oculta' => isset($questao['questaoOculta']) ? $questao['questaoOculta'] : null,
+                    'data_publicacao' => $questao['dataPublicacao']['$'],
                 ]);
-                echo "Questoes - {$questoes['numeroQuestaoAtual']} Criada com Sucesso!" . PHP_EOL;
+                echo "Questoes - {$questao['numeroQuestaoAtual']} Criada com Sucesso!" . PHP_EOL;
             }
         } catch (\Exception $e) {
             $this->job->fail($e);
@@ -126,7 +121,7 @@ class Questoes implements ShouldQueue
     }
 
     protected function updateOrCreateAlternativa($alternativa, $id_questao, $indice)
-    { //  'ext_id', 'id_questao', 'alternativa'
+    { 
         try {
             $alternativaModel = Alternativa::where('ext_id', $indice)
                 ->where('questao_id', $id_questao)

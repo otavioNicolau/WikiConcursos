@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\Materia;
+use App\Models\Questao;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,7 +15,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    //return view('welcome');
+
+    $questaoModel = Questao::where('ext_id', 1)->first();
+    echo "---";
+    echo $questaoModel;
+
+    if ($questaoModel) {
+        echo "1";
+    } else {
+        echo "2";
+    }
 });
 
 
