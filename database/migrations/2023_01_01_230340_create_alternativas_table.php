@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('alternativas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('ext_id')->unique();
+            $table->unsignedInteger('ext_id');
             $table->unsignedInteger('id_questao');
             $table->text('alternativa');
             $table->timestamps();

@@ -10,6 +10,13 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 class Comentario extends Command
 {
     /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+
+    use DispatchesJobs;
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -23,14 +30,6 @@ class Comentario extends Command
      */
     protected $description = 'Realizar a coleta das informações referente aos comentarios das questoes no tec.';
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-
-    use DispatchesJobs;
-
 
     public function __construct()
     {
@@ -39,23 +38,22 @@ class Comentario extends Command
 
     public function handle()
     {
-
         $headers = [
             'authority' => 'www.tecconcursos.com.br',
             'method' => 'POST',
-            'path' => '/api/questoes/1632188/resolucao',
+            'path' => '/api/questoes/199341/resolucao',
             'scheme' => 'https',
             'accept' => 'application/json, text/plain, * / *',
             'accept-encoding' => 'gzip, deflate, br',
             'accept-language' => 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
             'cache-control' => 'no-cache',
             'content-type' => 'application/x-www-form-urlencoded; charset=UTF-8',
-            'cookie' => '_ga=GA1.3.1235923260.1660774669; _fbp=fb.2.1672096463829.1678068607; _gid=GA1.3.1241576195.1673563183; JSESSIONID=0CE41BD2C56195E580FDE3B6C690BD9D; TecPermanecerLogado=Mjc2NzU2MixkYXkubmljb2xsYXVAZ21haWwuY29tLCQyYSQxMiRVRlFzY3E4TUszUndJQkxMRS9tUDJPdUVvazFxTkdhanEzY1RXT1ZxVWpOS0p6cXd4S0xwLg==; _gat=1; _gat_UA-32462178-1=1; AWSALB=GiMcjokjfxLZ+lGd9P7opaZvTjna/5KclDOclIhp7gS5h8SeQZLyNIf7K6EcIhNyMN/yozJm5yUcnFma1z/2Nh+51KviJB7pmOmk/awsxHrrv/cb53rTnOYB1BRo; AWSALBCORS=GiMcjokjfxLZ+lGd9P7opaZvTjna/5KclDOclIhp7gS5h8SeQZLyNIf7K6EcIhNyMN/yozJm5yUcnFma1z/2Nh+51KviJB7pmOmk/awsxHrrv/cb53rTnOYB1BRo; _gali=alternativa-1',
+            'cookie' => '_ga=GA1.3.1235923260.1660774669; _fbp=fb.2.1672096463829.1678068607; _gid=GA1.3.37202766.1673697246; JSESSIONID=BD93513721D957B91C3F61FF3095962B; _gat=1; _gat_UA-32462178-1=1; TecPermanecerLogado=ODU3MzQzLG90YXZpby5uaWNvbGxhdUBnbWFpbC5jb20sJDJhJDEyJFcuTTVyY1BRRmR0bzM2VnpGYlY2d09YZmROMkJSZ08uL3prbG0yeEZSOWZFRm5YS2RSTDVt; AWSALB=iOAIRJu6YIkrzA0tEMEHHqjNx623gfwHqYvuQny2kvmX/vFz4C1BlRRQtJIu7dhenSniSYjI45i0uWHsigqi+sPO2IAw/WLGg0lJLRIF/xx7ipAjoSR8dxgKX/ha; AWSALBCORS=iOAIRJu6YIkrzA0tEMEHHqjNx623gfwHqYvuQny2kvmX/vFz4C1BlRRQtJIu7dhenSniSYjI45i0uWHsigqi+sPO2IAw/WLGg0lJLRIF/xx7ipAjoSR8dxgKX/ha; _gali=alternativa-4',
             'if-modified-since' => 'Mon, 26 Jul 1997 05:00:00 GMT',
             'logado' => 'true',
             'origin' => 'https://www.tecconcursos.com.br',
             'pragma' => 'no-cache',
-            'referer' => 'https://www.tecconcursos.com.br/concursos/perito-criminal-pc-mg-2005/questoesObjetivas/!provas',
+            'referer' => 'https://www.tecconcursos.com.br/questoes/199341',
             'sec-ch-ua' => '"Not_A Brand";v="99", "Google Chrome";v="109", "Chromium";v="109"',
             'sec-ch-ua-mobile' => '?0',
             'sec-ch-ua-platform' => '"Windows"',

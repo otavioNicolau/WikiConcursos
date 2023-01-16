@@ -71,7 +71,7 @@ class Questao extends Command
 
         $this->dispatch(
             new Questoes(
-                "https://www.tecconcursos.com.br/api/questoes/155802/resolucao",
+                "https://www.tecconcursos.com.br/api/questoes/155801/resolucao",
                 $data,
                 $headers
             )

@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('materia_id');
             $table->string('hierarquia');
             $table->text('descendentes');
-            $table->string('descricao')->nullable();
+            $table->longText('descricao')->nullable();
             $table->timestamps();
         });
     }

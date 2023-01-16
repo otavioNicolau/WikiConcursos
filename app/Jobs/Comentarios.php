@@ -20,7 +20,7 @@ class Comentarios implements ShouldQueue
 
     protected $url;
     protected $id_questao;
-    public $tries = 0;
+    //public $tries = 0;
     public $headers;
 
     public function __construct($url, $id_questao, $headers)

@@ -124,20 +124,20 @@ class Questoes implements ShouldQueue
     { 
         try {
             $alternativaModel = Alternativa::where('ext_id', $indice)
-                ->where('questao_id', $id_questao)
+                ->where('id_questao', $id_questao)
                 ->first();
 
             if ($alternativaModel) {
-                $alternativaModel->alternativa = $alternativa[0];
+                $alternativaModel->alternativa = $alternativa;
                 $alternativaModel->save();
-                echo "Alternativa - {$alternativa[0]} Atualizada com Sucesso!" . PHP_EOL;
+                echo "Alternativa - {$alternativa} Atualizada com Sucesso!" . PHP_EOL;
             } else {
                 Alternativa::create([
                     'ext_id' => $indice,
                     'id_questao' => $id_questao,
-                    'alternativa' => $alternativa[0],
+                    'alternativa' => $alternativa,
                 ]);
-                echo "Alternativa - {$alternativa[0]} Foi Criada com sucesso" . PHP_EOL;
+                echo "Alternativa - {$alternativa} Foi Criada com sucesso" . PHP_EOL;
             }
         } catch (\Exception $e) {
             $this->job->fail($e);

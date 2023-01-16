@@ -12,7 +12,7 @@ class Questao extends Model
     protected $table = 'questoes';
 
     protected $fillable = [
-        'ext_id', 'id_materia', 'id_assunto', 'id_cargo', 'concurso_id', 'numero_questao_atual', 'enunciado',
+        'ext_id', 'id_materia', 'capitulo','id_assunto_anexo_capitulo', 'id_cargo', 'concurso_id', 'numero_questao_atual', 'enunciado',
         'correcao_questao', 'numero_alternativa_correta', 'possui_comentario', 'anulada', 'tipo_questao', 'desatualizada',
         'formato_questao', 'data_atual', 'gabarito_preliminar', 'desatualizada_com_gabarito_preliminar',
         'desatualizada_com_gabarito_definivo', 'questao_oculta', 'data_publicacao'

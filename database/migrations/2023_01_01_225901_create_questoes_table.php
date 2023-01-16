@@ -16,25 +16,26 @@ return new class extends Migration
         Schema::create('questoes', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('ext_id')->unique();
-            $table->unsignedInteger('id_materia');
-            $table->unsignedInteger('id_assunto');
-            $table->unsignedInteger('id_cargo');
-            $table->unsignedInteger('concurso_id');
-            $table->integer('numero_questao_atual');
-            $table->text('enunciado');
-            $table->boolean('correcao_questao');
-            $table->integer('numero_alternativa_correta');
-            $table->boolean('possui_comentario');
-            $table->boolean('anulada');
-            $table->string('tipo_questao');
-            $table->boolean('desatualizada');
-            $table->string('formato_questao');
-            $table->integer('data_atual');
-            $table->boolean('gabarito_preliminar');
-            $table->boolean('desatualizada_com_gabarito_preliminar');
-            $table->boolean('desatualizada_com_gabarito_definivo');
-            $table->boolean('questao_oculta');
-            $table->string('data_publicacao');
+            $table->unsignedInteger('id_materia')->nullable();
+            $table->unsignedInteger('id_assunto_anexo_capitulo')->nullable();
+            $table->unsignedInteger('capitulo')->nullable();
+            $table->unsignedInteger('id_cargo')->nullable();
+            $table->unsignedInteger('concurso_id')->nullable();
+            $table->integer('numero_questao_atual')->nullable();
+            $table->text('enunciado')->nullable();
+            $table->boolean('correcao_questao')->nullable();
+            $table->integer('numero_alternativa_correta')->nullable();
+            $table->boolean('possui_comentario')->nullable();
+            $table->boolean('anulada')->nullable();
+            $table->string('tipo_questao')->nullable();
+            $table->boolean('desatualizada')->nullable();
+            $table->string('formato_questao')->nullable();
+            $table->integer('data_atual')->nullable();
+            $table->boolean('gabarito_preliminar')->nullable();
+            $table->boolean('desatualizada_com_gabarito_preliminar')->nullable();
+            $table->boolean('desatualizada_com_gabarito_definivo')->nullable();
+            $table->boolean('questao_oculta')->nullable();
+            $table->string('data_publicacao')->nullable();
             $table->timestamps();
 
 
