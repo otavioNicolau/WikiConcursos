@@ -67,19 +67,15 @@ class Comentarios implements ShouldQueue
     {
         $comentarioModel = Comentario::where('id_questao', $id_questao)->first();
 
-
-        $data_publicacao_comentario = DateTime::createFromFormat('Y-m-d H:i:s',  $comentario['dataPublicacaoComentario']);
-        $data_publicacao_comentario = $data_publicacao_comentario->format('Y-m-d H:i:s');
-
         if ($comentarioModel) {
             $comentarioModel->comentario = $comentario['textoComentario'];
-            $comentarioModel->data_publicacao_comentario = $data_publicacao_comentario;
+            $comentarioModel->data_publicacao_comentario = $comentario['dataPublicacaoComentario'];
             $comentarioModel->save();
             echo "Comentario da Questão - {$id_questao} Atualizada com Sucesso!" . PHP_EOL;
         } else {
             Comentario::create([
                 'comentario' => $comentario['textoComentario'],
-                'data_publicacao_comentario' => $data_publicacao_comentario,
+                'data_publicacao_comentario' => $comentario['dataPublicacaoComentario'],
                 'id_questao' => $id_questao,
 
             ]);

@@ -1,5 +1,7 @@
 <?php
 
+use App\Models\Escolaridade;
+use App\Models\Orgao;
 use App\Models\Questao;
 use Illuminate\Support\Facades\Route;
 use OpenAI\Laravel\Facades\OpenAI;
@@ -69,6 +71,16 @@ Route::get('/termos', function () {
     echo $result['choices'][0]['text']; 
 });
 
+Route::get('/x', function () {
+
+    $escolaridades = Orgao::all();
+
+    foreach ($escolaridades as $escolaridade) {
+        echo "<h1>$escolaridade->descricao</h1>";
+    
+    }
+  
+});
 
 Route::prefix('/jobs')->group(function () {
     Route::queueMonitor();

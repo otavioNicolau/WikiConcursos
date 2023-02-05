@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('ext_id')->unique();
             $table->string('nome');
-            $table->string('descricao')->nullable();
+            $table->longText('descricao')->nullable();
             $table->timestamps();
         });
     }

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('nome');
             $table->string('tipo');
             $table->string('descendentes_de')->nullable();
+            $table->longText('descricao')->nullable();
             $table->string('title')->nullable();
             $table->timestamps();
         });

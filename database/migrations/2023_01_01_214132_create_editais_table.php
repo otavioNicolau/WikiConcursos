@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('editais', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('ext_id')->unique();
-            $table->string('nome')->nullable();
+            $table->longText('nome')->nullable();
             $table->unsignedInteger('id_banca')->nullable();
             $table->unsignedInteger('id_orgao')->nullable();
             $table->dateTime('prazo_inscricao')->nullable();

@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('comentarios', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('id_questao')->unique();
-            $table->date('data_publicacao_comentario');
-            $table->text('comentario');            
+            $table->string('data_publicacao_comentario');
+            $table->longText('comentario');          
             $table->timestamps();
         });
     }

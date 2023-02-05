@@ -50,10 +50,9 @@ class AssuntosGPT implements ShouldQueue
                 'prompt' => "
                 
                 ATUE COMO PROFESSOR E CRIE UM ARTIGO COMPLETO COM LINGUAGEM DE FACIL ENTENDIMENTO SOBRE O Assunto ABAIXO:
-                FORMATE COM CODIGO HTML.
-                SE POSSIVEL ORGANIZE EM TOPICOS.
-                COLOQUE ARTIGOS DE LEIS SOBRE O ASSUNTO E GRIFE EM NEGRITO.
-                GRIFE AS PARTES IMPORTANTE COM NEGRITO OU SUBILIADO.       
+                O TEXTO TEM QUE ESTAR NA sintaxe de marcação do MediaWik USANDO (=,==,===, * [[]] e etc..).
+                O TEXTO TEM QUE ESTAR EM TOPICOS DE FORMA ORGANIZADA.
+                O TEXTO TEM QUE TER NO MAXIMO 300 PALAVRAS NO ARTIGO. 
                 Matéria: {$materiaModel->nome}
                 Assunto: {$assuntoModel->nome}
                 ",

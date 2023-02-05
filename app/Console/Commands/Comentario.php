@@ -48,7 +48,7 @@ class Comentario extends Command
             'accept-language' => 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
             'cache-control' => 'no-cache',
             'content-type' => 'application/x-www-form-urlencoded; charset=UTF-8',
-            'cookie' => '_ga=GA1.3.1235923260.1660774669; _fbp=fb.2.1672096463829.1678068607; _gid=GA1.3.37202766.1673697246; JSESSIONID=BD93513721D957B91C3F61FF3095962B; _gat=1; _gat_UA-32462178-1=1; TecPermanecerLogado=ODU3MzQzLG90YXZpby5uaWNvbGxhdUBnbWFpbC5jb20sJDJhJDEyJFcuTTVyY1BRRmR0bzM2VnpGYlY2d09YZmROMkJSZ08uL3prbG0yeEZSOWZFRm5YS2RSTDVt; AWSALB=iOAIRJu6YIkrzA0tEMEHHqjNx623gfwHqYvuQny2kvmX/vFz4C1BlRRQtJIu7dhenSniSYjI45i0uWHsigqi+sPO2IAw/WLGg0lJLRIF/xx7ipAjoSR8dxgKX/ha; AWSALBCORS=iOAIRJu6YIkrzA0tEMEHHqjNx623gfwHqYvuQny2kvmX/vFz4C1BlRRQtJIu7dhenSniSYjI45i0uWHsigqi+sPO2IAw/WLGg0lJLRIF/xx7ipAjoSR8dxgKX/ha; _gali=alternativa-4',
+            'cookie' => '_ga=GA1.3.1154984221.1673711946; _gid=GA1.3.92734287.1673711946; _fbp=fb.2.1673711946824.1020756054; TecPermanecerLogado=ODU3MzQzLG90YXZpby5uaWNvbGxhdUBnbWFpbC5jb20sJDJhJDEyJFcuTTVyY1BRRmR0bzM2VnpGYlY2d09YZmROMkJSZ08uL3prbG0yeEZSOWZFRm5YS2RSTDVt; busca-por-enunciado-usuario-857343={%22busca%22:%22#12457%22%2C%22questao%22:12457}; JSESSIONID=47D43577CC5FB152E668B0E87A369A8C; AWSALB=wVVUEqD8ri3rZByA4FGiSONZ0UEkmP2E6euDdXZ0/r4PZQW92d/KlkLd9mmKxWLz218vugrKkdtHLMQE4GWwB96uAalC1/2j7QKyZFoX/M5iFJsnkvNHOC3qRhF6; AWSALBCORS=wVVUEqD8ri3rZByA4FGiSONZ0UEkmP2E6euDdXZ0/r4PZQW92d/KlkLd9mmKxWLz218vugrKkdtHLMQE4GWwB96uAalC1/2j7QKyZFoX/M5iFJsnkvNHOC3qRhF6; _gali=alternativa-0',
             'if-modified-since' => 'Mon, 26 Jul 1997 05:00:00 GMT',
             'logado' => 'true',
             'origin' => 'https://www.tecconcursos.com.br',
@@ -65,14 +65,14 @@ class Comentario extends Command
 
         $questoes = Questao::all();
 
-        foreach ($questoes as $questao) {
+        //foreach ($questoes as $questao) {
             $this->dispatch(
                 new Comentarios(
-                    "https://www.tecconcursos.com.br/api/questoes/" . $questao->ext_id . "/comentario",
-                    $questao->ext_id,
+                    "https://www.tecconcursos.com.br/api/questoes/1730652/comentario",
+                    '1730652',
                     $headers
                 )
             );
-        }
+        //}
     }
 }
