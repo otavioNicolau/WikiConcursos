@@ -36,6 +36,7 @@ return new class extends Migration
             $table->boolean('desatualizada_com_gabarito_definivo')->nullable();
             $table->boolean('questao_oculta')->nullable();
             $table->string('data_publicacao')->nullable();
+            $table->date('next_run')->nullable();
             $table->timestamps();
 
 

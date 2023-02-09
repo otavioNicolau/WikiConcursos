@@ -38,6 +38,10 @@ class AppServiceProvider extends ServiceProvider
         FacadesRateLimiter::for('orgaosGPT', fn()=> Limit::perMinute(10));
         FacadesRateLimiter::for('areasGPT', fn()=> Limit::perMinute(10));
         FacadesRateLimiter::for('bancasGPT', fn()=> Limit::perMinute(10));
+        FacadesRateLimiter::for('cargosGPT', fn()=> Limit::perMinute(10));
+        FacadesRateLimiter::for('materiasGPT', fn()=> Limit::perMinute(10));
+        FacadesRateLimiter::for('profissoesGPT', fn()=> Limit::perMinute(10));
+        FacadesRateLimiter::for('comentariosGPT', fn()=> Limit::perMinute(10));
 
         
     }

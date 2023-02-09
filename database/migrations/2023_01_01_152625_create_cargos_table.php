@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('descendentes_de')->nullable();
             $table->longText('descricao')->nullable();
             $table->string('title')->nullable();
+            $table->date('next_run')->nullable();
+            $table->boolean('gpt_worked')->default(false)->change();
             $table->timestamps();
         });
     }

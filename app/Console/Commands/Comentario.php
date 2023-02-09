@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Jobs\Comentarios;
 use App\Models\Questao;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
@@ -63,7 +64,7 @@ class Comentario extends Command
             'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
         ];
 
-        $questoes = Questao::all();
+        $questoes = Questao::where('next_run', '<', Carbon::now())->get();
 
         //foreach ($questoes as $questao) {
             $this->dispatch(

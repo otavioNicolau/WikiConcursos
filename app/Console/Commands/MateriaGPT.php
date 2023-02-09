@@ -2,20 +2,19 @@
 
 namespace App\Console\Commands;
 
+use App\Jobs\materiasGPT;
+use App\Models\Materia;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Console\Command;
 
-use App\Jobs\BancasGPT;
-use App\Models\Banca;
-
-class BancaGPT extends Command
+class MateriaGPT extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bot:banca-gpt';
+    protected $signature = 'bot:materia-gpt';
 
     /**
      * The console command description.
@@ -42,12 +41,12 @@ class BancaGPT extends Command
     public function handle()
     {
 
-        $bancas = Banca::where('gpt_worked', true)->get();
+        $materias = Materia::where('gpt_worked', true)->get();
 
-        foreach ($bancas as $banca) {
+        foreach ($materias as $materia) {
             $this->dispatch(
-                new BancasGPT(
-                    $banca->id
+                new materiasGPT(
+                    $materia->id
                 )
             );
         }

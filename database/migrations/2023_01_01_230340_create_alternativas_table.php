@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedInteger('ext_id');
             $table->unsignedInteger('id_questao');
             $table->text('alternativa');
+            $table->date('next_run')->nullable();
             $table->timestamps();
         });
     }

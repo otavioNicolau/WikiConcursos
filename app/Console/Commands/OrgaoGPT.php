@@ -42,7 +42,7 @@ class OrgaoGPT extends Command
 
     public function handle()
     {
-
+        profissoes
         $orgaos = Orgao::all();
 
         foreach ($orgaos as $orgao) {

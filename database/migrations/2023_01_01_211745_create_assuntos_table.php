@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('hierarquia');
             $table->text('descendentes');
             $table->longText('descricao')->nullable();
+            $table->date('next_run')->nullable();
+            $table->boolean('gpt_worked')->default(false)->change();
             $table->timestamps();
         });
     }

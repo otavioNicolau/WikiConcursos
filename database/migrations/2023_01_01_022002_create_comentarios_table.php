@@ -17,7 +17,10 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('id_questao')->unique();
             $table->string('data_publicacao_comentario');
-            $table->longText('comentario');          
+            $table->longText('comentario');
+            $table->longText('comentario_GPT')->nullable();
+            $table->date('next_run')->nullable();
+            $table->boolean('gpt_worked')->default(false)->change();  
             $table->timestamps();
         });
     }

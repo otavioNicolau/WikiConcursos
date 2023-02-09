@@ -42,6 +42,9 @@ class AssuntoGPT extends Command
     public function handle()
     {
 
+        $areas = Area::where('gpt_worked', true)->get();
+
+
         $assuntos = Assunto::all();
 
         foreach ($assuntos as $assunto) {

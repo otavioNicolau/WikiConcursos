@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 
 use App\Jobs\Assuntos;
 use App\Models\Materia;
+use Carbon\Carbon;
 
 class Assunto extends Command
 {
@@ -42,7 +43,7 @@ class Assunto extends Command
     public function handle()
     {
 
-        $materias = Materia::all();
+        $materias = Materia::where('next_run', '<', Carbon::now())->get();
 
         foreach ($materias as $materia) {
             $this->dispatch(

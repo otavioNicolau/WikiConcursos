@@ -40,7 +40,6 @@ class Banca extends Command
     {
         $this->dispatch(
             new Bancas("https://www.tecconcursos.com.br/api/bancas")
-
         );
     }
 }

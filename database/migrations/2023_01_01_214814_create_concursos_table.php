@@ -26,6 +26,7 @@ return new class extends Migration
             $table->string('nome_completo')->nullable();
             $table->string('url_concurso')->nullable();
             $table->string('area')->nullable(); // vem da questão
+            $table->date('next_run')->nullable();
             $table->timestamps(); 
 
         });

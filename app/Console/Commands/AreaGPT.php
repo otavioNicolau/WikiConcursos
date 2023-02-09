@@ -41,7 +41,7 @@ class AreaGPT extends Command
     public function handle()
     {
 
-        $areas = Area::all();
+        $areas = Area::where('gpt_worked', true)->get();
 
         foreach ($areas as $area) {
             $this->dispatch(

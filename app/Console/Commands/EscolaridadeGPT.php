@@ -7,6 +7,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Console\Command;
 
 use App\Models\Escolaridade;
+use Carbon\Carbon;
 
 class EscolaridadeGPT extends Command
 {
@@ -41,8 +42,7 @@ class EscolaridadeGPT extends Command
 
     public function handle()
     {
-
-        $escolaridades = Escolaridade::all();
+        $escolaridades = Escolaridade::where('next_run', '<', Carbon::now())->get();
 
         foreach ($escolaridades as $escolaridade) {
             $this->dispatch(

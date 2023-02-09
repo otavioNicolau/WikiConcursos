@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('nome');
             $table->integer('hierarquia');
             $table->longText('descricao')->nullable();
+            $table->date('next_run')->nullable();
+            $table->boolean('gpt_worked')->default(false)->change();
             $table->timestamps();
         });
     }

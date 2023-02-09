@@ -33,6 +33,7 @@ return new class extends Migration
             $table->boolean('ficticio')->nullable();
             $table->string('cargo_nome')->nullable();
             $table->string('cargo_sigla')->nullable();
+            $table->date('next_run')->nullable();
             $table->timestamps();          
 
 
