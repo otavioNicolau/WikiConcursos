@@ -21,6 +21,7 @@ return new class extends Migration
             $table->unsignedInteger('capitulo')->nullable();
             $table->unsignedInteger('id_cargo')->nullable();
             $table->unsignedInteger('concurso_id')->nullable();
+            $table->text('prova_nome')->nullable();
             $table->integer('numero_questao_atual')->nullable();
             $table->text('enunciado')->nullable();
             $table->boolean('correcao_questao')->nullable();
@@ -37,6 +38,8 @@ return new class extends Migration
             $table->boolean('questao_oculta')->nullable();
             $table->string('data_publicacao')->nullable();
             $table->date('next_run')->nullable();
+            $table->date('next_comentario_run')->nullable();
+
             $table->timestamps();
 
 

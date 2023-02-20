@@ -19,8 +19,9 @@ return new class extends Migration
             $table->string('nome');
             $table->string('url');
             $table->longText('descricao')->nullable();
-            $table->date('next_run')->nullable();
             $table->boolean('gpt_worked')->default(false)->change();
+            $table->date('next_run')->nullable();
+            $table->date('next_assuntos_run')->nullable();
             $table->timestamps();
         });
     }

@@ -42,7 +42,7 @@ class EscolaridadeGPT extends Command
 
     public function handle()
     {
-        $escolaridades = Escolaridade::where('next_run', '<', Carbon::now())->get();
+        $escolaridades = Escolaridade::where('gpt_worked', false)->get();
 
         foreach ($escolaridades as $escolaridade) {
             $this->dispatch(

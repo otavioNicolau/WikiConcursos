@@ -41,7 +41,7 @@ class MateriaGPT extends Command
     public function handle()
     {
 
-        $materias = Materia::where('gpt_worked', true)->get();
+        $materias = Materia::where('gpt_worked', false)->get();
 
         foreach ($materias as $materia) {
             $this->dispatch(

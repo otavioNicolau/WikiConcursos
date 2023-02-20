@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Models\Concurso;
 use App\Models\Edital;
 use App\Models\Materia;
+use Carbon\Carbon;
 use DateTime;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
@@ -18,7 +19,11 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class Editais implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     protected $url;
     protected $num;
@@ -49,41 +54,10 @@ class Editais implements ShouldQueue
 
 
                 foreach ($list as $item) {
-                    //foreach ($item['edital'] as $edital) {
                     $this->updateOrCreateEdital($item['edital']);
-                    // }
+
                     if ($item['concursos']) {
-
                         foreach ($item['concursos'] as $concurso) {
-
-                            if (!empty($concurso['arquivoGabarito'])) {
-                                $this->downloadFile(
-                                    "https://www.tecconcursos.com.br/download/" . $concurso['arquivoGabarito'],
-                                    "gabaritos"
-                                );
-                            }
-
-                            if (!empty($concurso['arquivoDiscursiva'])) {
-                                $this->downloadFile(
-                                    "https://www.tecconcursos.com.br/download/" . $concurso['arquivoDiscursiva'],
-                                    "discursivas"
-                                );
-                            }
-
-                            if (!empty($concurso['arquivoObjetiva'])) {
-                                $this->downloadFile(
-                                    "https://www.tecconcursos.com.br/download/" . $concurso['arquivoObjetiva'],
-                                    "objetivas"
-                                );
-                            }
-
-                            if (!empty($concurso['arquivoEdital'])) {
-                                $this->downloadFile(
-                                    "https://www.tecconcursos.com.br/download/" . $concurso['arquivoEdital'],
-                                    "editais"
-                                );
-                            }
-
                             $this->updateOrCreateConcurso($concurso);
                         }
                     }
@@ -114,30 +88,33 @@ class Editais implements ShouldQueue
     {
         $editalModel = Edital::where('ext_id', $edital['id'])->first();
 
-        $prazo_inscricao = DateTime::createFromFormat('d/m/Y H:i:s',  $edital['prazoInscricao']);
+        $prazo_inscricao = DateTime::createFromFormat('d/m/Y H:i:s', $edital['prazoInscricao']);
         $prazo_inscricao = $prazo_inscricao->format('Y-m-d H:i:s');
-
-        $data_inclusao = DateTime::createFromFormat('d/m/Y H:i:s',  $edital['dataInclusao']);
+        $data_inclusao = DateTime::createFromFormat('d/m/Y H:i:s', $edital['dataInclusao']);
         $data_inclusao = $data_inclusao->format('Y-m-d H:i:s');
 
+
         if ($editalModel) {
-            $editalModel->nome = isset($edital['nome']) ? $edital['nome'] : null;
-            $editalModel->prazo_inscricao = $prazo_inscricao;
-            $editalModel->ano = isset($edital['ano']) ? $edital['ano'] : null;
-            $editalModel->data_inclusao = $data_inclusao;
-            $editalModel->vagas =  isset($edital['vagas']) ? $edital['vagas'] : null;
-            $editalModel->salario_inicial_de = isset($edital['salarioInicialDe']) ? $edital['salarioInicialDe'] : null;
-            $editalModel->salario_inicial_ate =  isset($edital['salarioInicialAte']) ? $edital['salarioInicialAte'] : null;
-            $editalModel->taxa_inscricao_de =  isset($edital['taxaInscricaoDe']) ? $edital['taxaInscricaoDe'] : null;
-            $editalModel->taxa_inscricao_ate =  isset($edital['taxaInscricaoAte']) ? $edital['taxaInscricaoAte'] : null;
-            $editalModel->pagina_concurso =  isset($edital['paginaConcurso']) ? $edital['paginaConcurso'] : null;
-            $editalModel->url = isset($edital['url']) ? $edital['url'] : null;
-            $editalModel->publicado = isset($edital['publicado']) ? $edital['publicado'] : null;
-            $editalModel->ficticio = isset($edital['ficticio']) ? $edital['ficticio'] : null;
-            $editalModel->cargo_nome = isset($edital['cargoNome']) ? $edital['cargoNome'] : null;
-            $editalModel->cargo_sigla = isset($edital['cargoSigla']) ? $edital['cargoSigla'] : null;
-            $editalModel->save();
-            echo "EDITAL - {$edital['nome']} Atualizada com Sucesso!" . PHP_EOL;
+            if ($editalModel->next_run < Carbon::now()) {
+                $editalModel->nome = isset($edital['nome']) ? $edital['nome'] : null;
+                $editalModel->prazo_inscricao = $prazo_inscricao;
+                $editalModel->ano = isset($edital['ano']) ? $edital['ano'] : null;
+                $editalModel->data_inclusao = $data_inclusao;
+                $editalModel->vagas = isset($edital['vagas']) ? $edital['vagas'] : null;
+                $editalModel->salario_inicial_de = isset($edital['salarioInicialDe']) ? $edital['salarioInicialDe'] : null;
+                $editalModel->salario_inicial_ate = isset($edital['salarioInicialAte']) ? $edital['salarioInicialAte'] : null;
+                $editalModel->taxa_inscricao_de = isset($edital['taxaInscricaoDe']) ? $edital['taxaInscricaoDe'] : null;
+                $editalModel->taxa_inscricao_ate = isset($edital['taxaInscricaoAte']) ? $edital['taxaInscricaoAte'] : null;
+                $editalModel->pagina_concurso = isset($edital['paginaConcurso']) ? $edital['paginaConcurso'] : null;
+                $editalModel->url = isset($edital['url']) ? $edital['url'] : null;
+                $editalModel->publicado = isset($edital['publicado']) ? $edital['publicado'] : null;
+                $editalModel->ficticio = isset($edital['ficticio']) ? $edital['ficticio'] : null;
+                $editalModel->cargo_nome = isset($edital['cargoNome']) ? $edital['cargoNome'] : null;
+                $editalModel->cargo_sigla = isset($edital['cargoSigla']) ? $edital['cargoSigla'] : null;
+                $editalModel->next_run = Carbon::now()->addDays(5);
+                $editalModel->save();
+                echo "EDITAL - {$edital['nome']} Atualizada com Sucesso!" . PHP_EOL;
+            }
         } else {
             Edital::create([
                 'ext_id' => $edital['id'],
@@ -153,11 +130,12 @@ class Editais implements ShouldQueue
                 'taxa_inscricao_de' => isset($edital['salarioInicialAte']) ? $edital['taxaInscricaoDe'] : null,
                 'taxa_inscricao_ate' => isset($edital['taxaInscricaoAte']) ? $edital['taxaInscricaoAte'] : null,
                 'pagina_concurso' => isset($edital['paginaConcurso']) ? $edital['paginaConcurso'] : null,
-                'url' =>  isset($edital['url']) ? $edital['url'] : null,
+                'url' => isset($edital['url']) ? $edital['url'] : null,
                 'publicado' => isset($edital['publicado']) ? $edital['publicado'] : null,
                 'ficticio' => isset($edital['ficticio']) ? $edital['ficticio'] : null,
                 'cargo_nome' => isset($edital['cargoNome']) ? $edital['cargoNome'] : null,
                 'cargo_sigla' => isset($edital['cargoSigla']) ? $edital['cargoSigla'] : null,
+                'next_run' => Carbon::now()->addDays(5)
             ]);
             echo "EDITAL - {$edital['nome']} Foi Criada com sucesso" . PHP_EOL;
         }
@@ -166,22 +144,82 @@ class Editais implements ShouldQueue
     protected function updateOrCreateConcurso($concurso)
     {
         $concursoModel = Concurso::where('ext_id', $concurso['concursoId'])->first();
-
-        $data_aplicacao = DateTime::createFromFormat('d/m/Y H:i:s',  $concurso['dataAplicacao']);
+        $data_aplicacao = DateTime::createFromFormat('d/m/Y H:i:s', $concurso['dataAplicacao']);
         $data_aplicacao = $data_aplicacao->format('Y-m-d H:i:s');
 
+
         if ($concursoModel) {
-            $concursoModel->data_aplicacao = $data_aplicacao;
-            $concursoModel->escolaridade_enum = isset($concurso['escolaridadeEnum']) ? $concurso['escolaridadeEnum'] : null;
-            $concursoModel->arquivo_gabarito = isset($concurso['arquivoGabarito']) ? $concurso['arquivoGabarito'] : null;
-            $concursoModel->arquivo_discursiva = isset($concurso['arquivoDiscursiva']) ? $concurso['arquivoDiscursiva'] : null;
-            $concursoModel->arquivo_objetiva = isset($concurso['arquivoObjetiva']) ? $concurso['arquivoObjetiva'] : null;
-            $concursoModel->arquivo_edital = isset($concurso['arquivoEdital']) ? $concurso['arquivoEdital'] : null;
-            $concursoModel->nome_completo = isset($concurso['nomeCompleto']) ? $concurso['nomeCompleto'] : null;
-            $concursoModel->url_concurso = isset($concurso['urlConcurso']) ? $concurso['urlConcurso'] : null;
-            $concursoModel->save();
-            echo "CONCURSO - {$concurso['nomeCompleto']} Atualizada com Sucesso!" . PHP_EOL;
+            if ($concursoModel->next_run < Carbon::now()) {
+                if (!empty($concurso['arquivoGabarito'])) {
+                    $this->downloadFile(
+                        "https://www.tecconcursos.com.br/download/" . $concurso['arquivoGabarito'],
+                        "gabaritos"
+                    );
+                }
+
+                if (!empty($concurso['arquivoDiscursiva'])) {
+                    $this->downloadFile(
+                        "https://www.tecconcursos.com.br/download/" . $concurso['arquivoDiscursiva'],
+                        "discursivas"
+                    );
+                }
+
+                if (!empty($concurso['arquivoObjetiva'])) {
+                    $this->downloadFile(
+                        "https://www.tecconcursos.com.br/download/" . $concurso['arquivoObjetiva'],
+                        "objetivas"
+                    );
+                }
+
+                if (!empty($concurso['arquivoEdital'])) {
+                    $this->downloadFile(
+                        "https://www.tecconcursos.com.br/download/" . $concurso['arquivoEdital'],
+                        "editais"
+                    );
+                }
+
+
+                $concursoModel->data_aplicacao = $data_aplicacao;
+                $concursoModel->escolaridade_enum = isset($concurso['escolaridadeEnum']) ? $concurso['escolaridadeEnum'] : null;
+                $concursoModel->arquivo_gabarito = isset($concurso['arquivoGabarito']) ? $concurso['arquivoGabarito'] : null;
+                $concursoModel->arquivo_discursiva = isset($concurso['arquivoDiscursiva']) ? $concurso['arquivoDiscursiva'] : null;
+                $concursoModel->arquivo_objetiva = isset($concurso['arquivoObjetiva']) ? $concurso['arquivoObjetiva'] : null;
+                $concursoModel->arquivo_edital = isset($concurso['arquivoEdital']) ? $concurso['arquivoEdital'] : null;
+                $concursoModel->nome_completo = isset($concurso['nomeCompleto']) ? $concurso['nomeCompleto'] : null;
+                $concursoModel->url_concurso = isset($concurso['urlConcurso']) ? $concurso['urlConcurso'] : null;
+                $concursoModel->next_run = Carbon::now()->addDays(5);
+                $concursoModel->save();
+                echo "CONCURSO - {$concurso['nomeCompleto']} Atualizada com Sucesso!" . PHP_EOL;
+            }
         } else {
+            
+            if (!empty($concurso['arquivoGabarito'])) {
+                $this->downloadFile(
+                    "https://www.tecconcursos.com.br/download/" . $concurso['arquivoGabarito'],
+                    "gabaritos"
+                );
+            }
+
+            if (!empty($concurso['arquivoDiscursiva'])) {
+                $this->downloadFile(
+                    "https://www.tecconcursos.com.br/download/" . $concurso['arquivoDiscursiva'],
+                    "discursivas"
+                );
+            }
+
+            if (!empty($concurso['arquivoObjetiva'])) {
+                $this->downloadFile(
+                    "https://www.tecconcursos.com.br/download/" . $concurso['arquivoObjetiva'],
+                    "objetivas"
+                );
+            }
+
+            if (!empty($concurso['arquivoEdital'])) {
+                $this->downloadFile(
+                    "https://www.tecconcursos.com.br/download/" . $concurso['arquivoEdital'],
+                    "editais"
+                );
+            }
 
             Concurso::create([
                 'ext_id' => $concurso['concursoId'],
@@ -194,43 +232,43 @@ class Editais implements ShouldQueue
                 'arquivo_edital' => isset($concurso['arquivoEdital']) ? $concurso['arquivoEdital'] : null,
                 'nome_completo' => isset($concurso['nomeCompleto']) ? $concurso['nomeCompleto'] : null,
                 'url_concurso' => isset($concurso['urlConcurso']) ? $concurso['urlConcurso'] : null,
+                'next_run' => Carbon::now()->addDays(5)
             ]);
             echo "CONCURSO - {$concurso['nomeCompleto']} Foi Criada com sucesso" . PHP_EOL;
         }
     }
 
+
     protected function downloadFile($file_url, $path)
     {
-
         try {
             $client = new Client();
             $response = $client->get($file_url, []);
 
             if ($response->getStatusCode() == 200) {
-
                 $fileContents = $response->getBody()->getContents();
                 $fileLengthWeb = $response->getHeader('Content-Length');
                 $fileType = $response->getHeader('Content-Type');
                 $extension = '';
                 if ($fileType[0] == "application/pdf") {
                     $extension = ".pdf";
-                } else if ($fileType[0] == "image/jpeg" || $fileType[0] == "image/pjpeg" || $fileType[0] == "image/jpeg" || $fileType[0] == "image/pjpeg") {
+                } elseif ($fileType[0] == "image/jpeg" || $fileType[0] == "image/pjpeg" || $fileType[0] == "image/jpeg" || $fileType[0] == "image/pjpeg") {
                     $extension = ".jpg";
-                } else if ($fileType[0] == "image/png") {
+                } elseif ($fileType[0] == "image/png") {
                     $extension = ".png";
-                } else if ($fileType == "image/gif") {
+                } elseif ($fileType == "image/gif") {
                     $extension = ".gif";
-                } else if ($fileType[0] == "application/x-zip-compressed") {
+                } elseif ($fileType[0] == "application/x-zip-compressed") {
                     $extension = ".zip";
-                } else if ($fileType[0] == "application/zip") {
+                } elseif ($fileType[0] == "application/zip") {
                     $extension = ".zip";
-                } else if ($fileType[0] == "application/rar") {
+                } elseif ($fileType[0] == "application/rar") {
                     $extension = ".rar";
-                } else if ($fileType[0] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                } elseif ($fileType[0] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
                     $extension = ".docx";
-                } else if ($fileType[0] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+                } elseif ($fileType[0] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
                     $extension = ".xlsx";
-                } else if ($fileType[0] == "application/vnd.openxmlformats-officedocument.presentationml.presentation") {
+                } elseif ($fileType[0] == "application/vnd.openxmlformats-officedocument.presentationml.presentation") {
                     $extension = ".pptx";
                 } else {
                     $extension = ".jpg";

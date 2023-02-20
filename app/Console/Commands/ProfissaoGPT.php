@@ -41,7 +41,7 @@ class ProfissaoGPT extends Command
     public function handle()
     {
 
-        $profissoes = Profissao::where('gpt_worked', true)->get();
+        $profissoes = Profissao::where('gpt_worked', false)->get();
 
         foreach ($profissoes as $profissao) {
             $this->dispatch(

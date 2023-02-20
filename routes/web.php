@@ -1,8 +1,10 @@
 <?php
 
+use App\Models\Edital;
 use App\Models\Escolaridade;
 use App\Models\Orgao;
 use App\Models\Questao;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 use OpenAI\Laravel\Facades\OpenAI;
 
@@ -73,13 +75,21 @@ Route::get('/termos', function () {
 
 Route::get('/x', function () {
 
-    $escolaridades = Orgao::all();
+    $editalModel = Edital::where('ext_id', 10217)->first();
 
-    foreach ($escolaridades as $escolaridade) {
-        echo "<h1>$escolaridade->descricao</h1>";
     
+
+    if($editalModel->next_run < Carbon::now()){
+        echo 'true';
     }
-  
+
+
+
+
+    if($editalModel == null){
+        echo 'null';
+    }
+
 });
 
 Route::prefix('/jobs')->group(function () {

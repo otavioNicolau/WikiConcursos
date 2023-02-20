@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Cargo;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -81,6 +82,7 @@ class Cargos implements ShouldQueue
             $cargoModel->tipo = $cargo['tipo'];
             $cargoModel->title = array_key_exists('title', $cargo) ? $cargo['title'] : " * ";
             $cargoModel->descendentes_de = $descendentes_de;
+            $cargoModel->next_run  = Carbon::now()->addDays(5);
             $cargoModel->save();
             echo "Cargo - {$cargo['nome']} Atualizada com Sucesso!" . PHP_EOL;
         } else {
@@ -90,8 +92,8 @@ class Cargos implements ShouldQueue
                 'orgao_id' => $this->orgao_id,
                 'tipo' => $cargo['tipo'],
                 'title' => array_key_exists('title', $cargo) ? $cargo['title'] : " * ",
-                'descendentes_de' => $descendentes_de
-
+                'descendentes_de' => $descendentes_de,
+                'next_run' => Carbon::now()->addDays(5)
             ]);
             echo "Cargo - {$cargo['nome']} Foi Criada com sucesso" . PHP_EOL;
         }

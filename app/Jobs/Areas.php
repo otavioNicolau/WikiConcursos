@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Area;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,7 +14,11 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class Areas implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     protected $url;
     public $tries = 0;
@@ -33,7 +38,6 @@ class Areas implements ShouldQueue
             $statusCode = $response->getStatusCode();
 
             if ($statusCode == 200) {
-
                 $data = json_decode($response->getBody(), true);
                 $areas = $data['areas'];
 
@@ -52,18 +56,21 @@ class Areas implements ShouldQueue
         $areaModel = Area::where('ext_id', $area['id'])->first();
 
         if ($areaModel) {
-            $areaModel->nome = $area['nome'];
-            $areaModel->hierarquia = $area['hierarquia'];
-            $areaModel->save();
-            echo "Area - {$area['nome']} Atualizada com Sucesso!" . PHP_EOL;
+            if ($areaModel->next_run < Carbon::now()) {
+                $areaModel->nome = $area['nome'];
+                $areaModel->hierarquia = $area['hierarquia'];
+                $areaModel->next_run = Carbon::now()->addDays(5);
+                $areaModel->save();
+                echo "Area - {$area['nome']} Atualizada com Sucesso!" . PHP_EOL;
+            }
         } else {
             Area::create([
                 'ext_id' => $area['id'],
                 'nome' => $area['nome'],
                 'hierarquia' => $area['hierarquia'],
+                'next_run' => Carbon::now()->addDays(5)
             ]);
             echo "Area - {$area['nome']} Foi Criada com sucesso" . PHP_EOL;
         }
     }
 }
-

@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 use App\Models\Assunto;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -63,6 +64,7 @@ class Assuntos implements ShouldQueue
             $assuntoModel->materia_id = $assunto['materia']['id'];
             $assuntoModel->hierarquia = $assunto['hierarquia'];
             $assuntoModel->descendentes = $assunto['descendentes'];
+            $assuntoModel->next_run = Carbon::now()->addDays(5);
             $assuntoModel->save();
             echo "ASSUNTO - {$assunto['nome']} Atualizada com Sucesso!" . PHP_EOL;
         } else {
@@ -71,7 +73,8 @@ class Assuntos implements ShouldQueue
                 'nome' => $assunto['nome'],
                 'materia_id' => $assunto['materia']['id'],
                 'hierarquia' => $assunto['hierarquia'],
-                'descendentes' => $assunto['descendentes']
+                'descendentes' => $assunto['descendentes'],
+                'next_run' => Carbon::now()->addDays(5),
             ]);
             echo "ASSUNTO - {$assunto['nome']} Foi Criada com sucesso" . PHP_EOL;
         }

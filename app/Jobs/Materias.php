@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Jobs;
+
 use App\Models\Materia;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -12,7 +14,11 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class Materias implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     protected $url;
     protected $num;
@@ -65,15 +71,19 @@ class Materias implements ShouldQueue
         $materiaModel = Materia::where('ext_id', $materia['id'])->first();
 
         if ($materiaModel) {
-            $materiaModel->nome = $materia['nome'];
-            $materiaModel->url = $materia['url'];
-            $materiaModel->save();
-            echo "MATERIA - {$materia['nome']} Atualizada com Sucesso!" . PHP_EOL;
+            if ($materiaModel->next_run < Carbon::now()) {
+                $materiaModel->nome = $materia['nome'];
+                $materiaModel->url = $materia['url'];
+                $materiaModel->next_run = Carbon::now()->addDays(5);
+                $materiaModel->save();
+                echo "MATERIA - {$materia['nome']} Atualizada com Sucesso!" . PHP_EOL;
+            }
         } else {
             Materia::create([
                 'ext_id' => $materia['id'],
                 'nome' => $materia['nome'],
                 'url' => $materia['url'],
+                'next_run' => Carbon::now()->addDays(5)
             ]);
             echo "MATERIA - {$materia['nome']} Foi Criada com sucesso" . PHP_EOL;
         }

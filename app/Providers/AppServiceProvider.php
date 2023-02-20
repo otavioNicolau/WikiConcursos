@@ -27,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        FacadesRateLimiter::for('prova', fn()=> Limit::perMinute(50));
         FacadesRateLimiter::for('cargos', fn()=> Limit::perMinute(50));
         FacadesRateLimiter::for('orgaos', fn()=> Limit::perMinute(100));
         FacadesRateLimiter::for('questoes', fn()=> Limit::perMinute(30));

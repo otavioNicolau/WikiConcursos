@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Models\Cargo;
 use App\Models\Comentario;
+use Carbon\Carbon;
 use DateTime;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
@@ -20,7 +21,7 @@ class Comentarios implements ShouldQueue
 
     protected $url;
     protected $id_questao;
-    //public $tries = 0;
+    public $tries = 0;
     public $headers;
 
     public function __construct($url, $id_questao, $headers)
@@ -70,6 +71,7 @@ class Comentarios implements ShouldQueue
         if ($comentarioModel) {
             $comentarioModel->comentario = $comentario['textoComentario'];
             $comentarioModel->data_publicacao_comentario = $comentario['dataPublicacaoComentario'];
+            $comentarioModel->next_run = Carbon::now()->addDays(5);
             $comentarioModel->save();
             echo "Comentario da Questão - {$id_questao} Atualizada com Sucesso!" . PHP_EOL;
         } else {
@@ -77,7 +79,7 @@ class Comentarios implements ShouldQueue
                 'comentario' => $comentario['textoComentario'],
                 'data_publicacao_comentario' => $comentario['dataPublicacaoComentario'],
                 'id_questao' => $id_questao,
-
+                'next_run' => Carbon::now()->addDays(5)
             ]);
             echo "Comentario da Questão - {$id_questao} Foi Criada com sucesso" . PHP_EOL;
         }

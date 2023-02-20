@@ -42,8 +42,8 @@ class OrgaoGPT extends Command
 
     public function handle()
     {
-        profissoes
-        $orgaos = Orgao::all();
+        
+        $orgaos = Orgao::where('gpt_worked', false)->get();
 
         foreach ($orgaos as $orgao) {
             $this->dispatch(

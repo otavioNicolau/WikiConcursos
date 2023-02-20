@@ -42,7 +42,7 @@ class Assunto extends Command
 
     public function handle()
     {
-
+        
         $materias = Materia::where('next_run', '<', Carbon::now())->get();
 
         foreach ($materias as $materia) {
@@ -52,6 +52,12 @@ class Assunto extends Command
                     $materia->ext_id
                 )
             );
+
+            $materia->next_assuntos_run = Carbon::now()->addDays(5);
+            $materia->save();
+            
         }
+
+
     }
 }

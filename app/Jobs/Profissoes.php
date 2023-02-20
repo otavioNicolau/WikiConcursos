@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Profissao;
+use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -13,7 +14,11 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class Profissoes implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     protected $url;
     public $tries = 0;
@@ -33,7 +38,6 @@ class Profissoes implements ShouldQueue
             $statusCode = $response->getStatusCode();
 
             if ($statusCode == 200) {
-
                 $data = json_decode($response->getBody(), true);
                 $profissoes = $data['profissoes'];
 
@@ -52,13 +56,17 @@ class Profissoes implements ShouldQueue
         $profissaoModel = Profissao::where('ext_id', $profissao['id'])->first();
 
         if ($profissaoModel) {
-            $profissaoModel->nome = $profissao['nome'];
-            $profissaoModel->save();
-            echo "Profissão - {$profissao['nome']} Atualizada com Sucesso!" . PHP_EOL;
+            if ($profissaoModel->next_run < Carbon::now()) {
+                $profissaoModel->nome = $profissao['nome'];
+                $profissaoModel->next_run = Carbon::now()->addDays(5);
+                $profissaoModel->save();
+                echo "Profissão - {$profissao['nome']} Atualizada com Sucesso!" . PHP_EOL;
+            }
         } else {
             Profissao::create([
                 'ext_id' => $profissao['id'],
                 'nome' => $profissao['nome'],
+                'next_run' => Carbon::now()->addDays(5)
             ]);
             echo "Profissão - {$profissao['nome']} Foi Criada com sucesso" . PHP_EOL;
         }

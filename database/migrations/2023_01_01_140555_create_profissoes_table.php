@@ -18,8 +18,8 @@ return new class extends Migration
             $table->unsignedInteger('ext_id')->unique();
             $table->string('nome');
             $table->longText('descricao')->nullable();
-            $table->date('next_run')->nullable();
             $table->boolean('gpt_worked')->default(false)->change();
+            $table->date('next_run')->nullable();
             $table->timestamps();
         });
     }

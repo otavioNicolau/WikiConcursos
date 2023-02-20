@@ -20,7 +20,11 @@ use PhpParser\Node\Stmt\Echo_;
 
 class Orgaos implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     protected $url;
     protected $num;
@@ -53,20 +57,10 @@ class Orgaos implements ShouldQueue
             $statusCode = $response->getStatusCode();
 
             if ($statusCode == 200) {
-
-
                 $data = json_decode($response->getBody(), true);
                 $list = $data['list'];
 
                 foreach ($list as $orgao) {
-
-                    if (!empty($orgao['uuidLogo'])) {
-                        $this->downloadFile(
-                            "https://s3-sa-east-1.amazonaws.com/figuras.tecconcursos.com.br/" . $orgao['uuidLogo'],
-                            "orgaos"
-                        );
-                    }
-
                     $this->updateOrCreateOrgao($orgao);
                 }
             }
@@ -89,22 +83,42 @@ class Orgaos implements ShouldQueue
         $orgaoModel = Orgao::where('ext_id', $orgao['id'])->first();
 
         if ($orgaoModel) {
-            $orgaoModel->nome = $orgao['nome'];
-            $orgaoModel->sigla = $orgao['sigla'];
-            $orgaoModel->url = $orgao['url'];
-            $orgaoModel->uuid_logo = $orgao['uuidLogo'];
-            //$orgaoModel->orgao_regiao = $orgao['orgao_regiao'];
-            //$orgaoModel->orgao_uuid = $orgao['orgao_uuid'];
-            // $orgaoModel->caminho_logotipo_orgao = $orgao['caminho_logotipo_orgao'];
-            $orgaoModel->save();
-            echo "Orgão - {$orgao['nome']} Atualizado com Sucesso!" . PHP_EOL;
+            if ($orgaoModel->next_run < Carbon::now()) {
+                if (!empty($orgao['uuidLogo'])) {
+                    $this->downloadFile(
+                        "https://s3-sa-east-1.amazonaws.com/figuras.tecconcursos.com.br/" . $orgao['uuidLogo'],
+                        "orgaos"
+                    );
+                }
+
+
+                $orgaoModel->nome = $orgao['nome'];
+                $orgaoModel->sigla = $orgao['sigla'];
+                $orgaoModel->url = $orgao['url'];
+                $orgaoModel->uuid_logo = $orgao['uuidLogo'];
+                $orgaoModel->next_run = Carbon::now()->addDays(5);
+                //$orgaoModel->orgao_regiao = $orgao['orgao_regiao'];
+                //$orgaoModel->orgao_uuid = $orgao['orgao_uuid'];
+                // $orgaoModel->caminho_logotipo_orgao = $orgao['caminho_logotipo_orgao'];
+                $orgaoModel->save();
+                echo "Orgão - {$orgao['nome']} Atualizado com Sucesso!" . PHP_EOL;
+            }
         } else {
+            if (!empty($orgao['uuidLogo'])) {
+                $this->downloadFile(
+                    "https://s3-sa-east-1.amazonaws.com/figuras.tecconcursos.com.br/" . $orgao['uuidLogo'],
+                    "orgaos"
+                );
+            }
+
+
             Orgao::create([
                 'ext_id' => $orgao['id'],
                 'nome' => $orgao['nome'],
                 'sigla' => $orgao['sigla'],
                 'url' => $orgao['url'],
                 'uuid_logo' => $orgao['uuidLogo'],
+                'next_run' => Carbon::now()->addDays(5),
                 //'orgao_regiao' => $orgao['orgao_regiao'],
                 //'orgao_uuid' => $orgao['orgao_uuid'],
                 //'caminho_logotipo_orgao' => $orgao['caminho_logotipo_orgao'],
@@ -116,13 +130,11 @@ class Orgaos implements ShouldQueue
 
     protected function downloadFile($file_url, $path)
     {
-
         try {
             $client = new Client();
             $response = $client->get($file_url, []);
 
             if ($response->getStatusCode() == 200) {
-
                 $fileContents = $response->getBody()->getContents();
                 $fileLengthWeb = $response->getHeader('Content-Length');
                 $fileType = $response->getHeader('Content-Type');
@@ -130,21 +142,21 @@ class Orgaos implements ShouldQueue
                 $extension = '';
                 if ($fileType[0] == "application/pdf") {
                     $extension = ".pdf";
-                } else if ($fileType[0] == "image/jpeg" || $fileType[0] == "image/pjpeg" || $fileType[0] == "image/jpeg" || $fileType[0] == "image/pjpeg") {
+                } elseif ($fileType[0] == "image/jpeg" || $fileType[0] == "image/pjpeg" || $fileType[0] == "image/jpeg" || $fileType[0] == "image/pjpeg") {
                     $extension = ".jpg";
-                } else if ($fileType[0] == "image/png") {
+                } elseif ($fileType[0] == "image/png") {
                     $extension = ".png";
-                } else if ($fileType == "image/gif") {
+                } elseif ($fileType == "image/gif") {
                     $extension = ".gif";
-                } else if ($fileType[0] == "application/zip") {
+                } elseif ($fileType[0] == "application/zip") {
                     $extension = ".zip";
-                } else if ($fileType[0] == "application/x-rar-compressed") {
+                } elseif ($fileType[0] == "application/x-rar-compressed") {
                     $extension = ".rar";
-                } else if ($fileType[0] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                } elseif ($fileType[0] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
                     $extension = ".docx";
-                } else if ($fileType[0] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+                } elseif ($fileType[0] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
                     $extension = ".xlsx";
-                } else if ($fileType[0] == "application/vnd.openxmlformats-officedocument.presentationml.presentation") {
+                } elseif ($fileType[0] == "application/vnd.openxmlformats-officedocument.presentationml.presentation") {
                     $extension = ".pptx";
                 } else {
                     $extension = ".jpg";

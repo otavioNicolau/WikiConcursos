@@ -3,12 +3,12 @@
 namespace App\Console\Commands;
 
 use App\Jobs\Cargos;
-use App\Models\Cargo;
+use App\Models\Orgao;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
-class Cargo extends Command
+class CargoComand extends Command
 {
     /**
      * The name and signature of the console command.
@@ -40,15 +40,17 @@ class Cargo extends Command
 
     public function handle()
     {
-        $cargos = Cargo::where('next_run', '<', Carbon::now())->get();
+        $orgaos = Orgao::where('next_cargo_run', '<', Carbon::now())->get();
 
-        foreach ($cargos as $cargo) {
+        foreach ($orgaos as $orgao) {
             $this->dispatch(
                 new Cargos(
                     "https://www.tecconcursos.com.br/api/cargos",
-                    $cargo->ext_id
+                    $orgao->ext_id
                 )
             );
+            $orgao->next_cargo_run = Carbon::now()->addDays(5);
+            $orgao->save();
         }
     }
 }

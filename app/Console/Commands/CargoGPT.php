@@ -41,7 +41,7 @@ class CargoGPT extends Command
     public function handle()
     {
 
-        $cargos = Cargo::where('gpt_worked', true)->get();
+        $cargos = Cargo::where('gpt_worked', false)->get();
 
         foreach ($cargos as $cargo) {
             $this->dispatch(

@@ -41,7 +41,7 @@ class ComentarioGPT extends Command
     public function handle()
     {
 
-        $cargos = Comentario::where('gpt_worked', true)->get();
+        $comentarios = Comentario::where('gpt_worked', false)->get();
 
         foreach ($comentarios as $comentario) {
             $this->dispatch(

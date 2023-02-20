@@ -3,6 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Jobs\Questoes;
+use App\Models\Questao as ModelsQuestao;
+use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
@@ -38,11 +40,11 @@ class Questao extends Command
     public function handle()
     {
         $data = [
-            'alternativa' => '5',
+            'alternativa' => '1',
             '_method' => 'put'
         ];
 
-        
+
         $headers = [
             'authority' => 'www.tecconcursos.com.br',
             'method' => 'POST',
@@ -68,13 +70,19 @@ class Questao extends Command
             'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
         ];
 
+        $questoes = ModelsQuestao::where('next_run', '<', Carbon::now())->get();
 
-        $this->dispatch(
-            new Questoes(
-                "https://www.tecconcursos.com.br/api/questoes/155801/resolucao",
-                $data,
-                $headers
-            )
-        );
+        foreach ($questoes as $questao) {
+            $this->dispatch(
+                new Questoes(
+                    "https://www.tecconcursos.com.br/api/questoes/{{$questao->ext_id}}/resolucao",
+                    $data,
+                    $headers
+                )
+            );
+
+            $questao->next_run = Carbon::now()->addDays(5);
+            $questao->save();
+        }
     }
 }

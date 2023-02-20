@@ -42,7 +42,7 @@ class BancaGPT extends Command
     public function handle()
     {
 
-        $bancas = Banca::where('gpt_worked', true)->get();
+        $bancas = Banca::where('gpt_worked', false)->get();
 
         foreach ($bancas as $banca) {
             $this->dispatch(

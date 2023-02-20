@@ -64,16 +64,18 @@ class Comentario extends Command
             'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
         ];
 
-        $questoes = Questao::where('next_run', '<', Carbon::now())->get();
+        $questoes = Questao::where('next_comentario_run', '<', Carbon::now())->get();
 
-        //foreach ($questoes as $questao) {
+        foreach ($questoes as $questao) {
             $this->dispatch(
                 new Comentarios(
-                    "https://www.tecconcursos.com.br/api/questoes/1730652/comentario",
-                    '1730652',
+                    "https://www.tecconcursos.com.br/api/questoes/{$questao->ext_id}/comentario",
+                    $questao->ext_id,
                     $headers
                 )
             );
-        //}
+            $questao->next_comentario_run = Carbon::now()->addDays(5);
+            $questao->save();
+        }
     }
 }

@@ -22,6 +22,7 @@ return new class () extends Migration {
             $table->string('orgao_regiao')->nullable(); // VEM DA REQUISIÇÃO EDITAIS
             $table->longText('descricao')->nullable();
             $table->date('next_run')->nullable();
+            $table->date('next_cargo_run')->nullable();
             $table->boolean('gpt_worked')->default(false)->change();
             $table->timestamps();
         });
