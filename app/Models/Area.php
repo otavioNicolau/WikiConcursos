@@ -10,6 +10,11 @@ class Area extends Model
     use HasFactory;
 
     protected $fillable = [
-        'ext_id', 'nome', 'hierarquia', 'descricao'
-    ];
+        'ext_id',
+        'nome',
+        'hierarquia',
+        'descricao',
+        'gpt_worked',
+        'next_run'
+        ];
 }

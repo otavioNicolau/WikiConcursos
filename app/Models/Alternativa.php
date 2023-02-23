@@ -15,8 +15,12 @@ class Alternativa extends Model
      * @var array
      */
     protected $fillable = [
-        'ext_id', 'id_questao', 'alternativa'
+        'ext_id',
+        'id_questao',
+        'alternativa',
+        'next_run',
     ];
+
 
     public function questao()
     {

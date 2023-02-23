@@ -16,13 +16,13 @@ return new class extends Migration
         Schema::create('assuntos', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('ext_id')->unique();
-            $table->string('nome');
+            $table->string('nome')->nullable();
             $table->unsignedBigInteger('materia_id');
-            $table->string('hierarquia');
-            $table->text('descendentes');
+            $table->string('hierarquia')->nullable();
+            $table->text('descendentes')->nullable();
             $table->longText('descricao')->nullable();
             $table->date('next_run')->nullable();
-            $table->boolean('gpt_worked')->default(false)->change();
+            $table->boolean('gpt_worked')->default(false);
             $table->timestamps();
         });
     }

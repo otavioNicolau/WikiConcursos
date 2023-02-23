@@ -3,7 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Jobs\Questoes;
-use App\Models\Questao as ModelsQuestao;
+use App\Models\Questao as QuestaoModel;
 use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -70,12 +70,16 @@ class Questao extends Command
             'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
         ];
 
-        $questoes = ModelsQuestao::where('next_run', '<', Carbon::now())->get();
+        
+        $questoes = QuestaoModel::where(function ($query) {
+            $query->whereDate('next_run', '<', Carbon::now()->toDateString())
+                  ->orWhereNull('next_run');
+        })->get();
 
         foreach ($questoes as $questao) {
             $this->dispatch(
                 new Questoes(
-                    "https://www.tecconcursos.com.br/api/questoes/{{$questao->ext_id}}/resolucao",
+                    "https://www.tecconcursos.com.br/api/questoes/{$questao->ext_id}/resolucao",
                     $data,
                     $headers
                 )

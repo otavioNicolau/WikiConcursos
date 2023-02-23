@@ -80,10 +80,12 @@ class Orgaos implements ShouldQueue
 
     protected function updateOrCreateOrgao($orgao)
     {
-        $orgaoModel = Orgao::where('ext_id', $orgao['id'])->first();
+        try {
+            $orgaoModel = Orgao::firstOrCreate(
+                ['ext_id' => $orgao['id']],
+            );
 
-        if ($orgaoModel) {
-            if ($orgaoModel->next_run < Carbon::now()) {
+            if ($orgaoModel->wasRecentlyCreated || $orgaoModel->next_run < Carbon::now()->toDateString()) {
                 if (!empty($orgao['uuidLogo'])) {
                     $this->downloadFile(
                         "https://s3-sa-east-1.amazonaws.com/figuras.tecconcursos.com.br/" . $orgao['uuidLogo'],
@@ -91,39 +93,17 @@ class Orgaos implements ShouldQueue
                     );
                 }
 
-
                 $orgaoModel->nome = $orgao['nome'];
                 $orgaoModel->sigla = $orgao['sigla'];
                 $orgaoModel->url = $orgao['url'];
                 $orgaoModel->uuid_logo = $orgao['uuidLogo'];
                 $orgaoModel->next_run = Carbon::now()->addDays(5);
-                //$orgaoModel->orgao_regiao = $orgao['orgao_regiao'];
-                //$orgaoModel->orgao_uuid = $orgao['orgao_uuid'];
-                // $orgaoModel->caminho_logotipo_orgao = $orgao['caminho_logotipo_orgao'];
                 $orgaoModel->save();
                 echo "Orgão - {$orgao['nome']} Atualizado com Sucesso!" . PHP_EOL;
             }
-        } else {
-            if (!empty($orgao['uuidLogo'])) {
-                $this->downloadFile(
-                    "https://s3-sa-east-1.amazonaws.com/figuras.tecconcursos.com.br/" . $orgao['uuidLogo'],
-                    "orgaos"
-                );
-            }
-
-
-            Orgao::create([
-                'ext_id' => $orgao['id'],
-                'nome' => $orgao['nome'],
-                'sigla' => $orgao['sigla'],
-                'url' => $orgao['url'],
-                'uuid_logo' => $orgao['uuidLogo'],
-                'next_run' => Carbon::now()->addDays(5),
-                //'orgao_regiao' => $orgao['orgao_regiao'],
-                //'orgao_uuid' => $orgao['orgao_uuid'],
-                //'caminho_logotipo_orgao' => $orgao['caminho_logotipo_orgao'],
-            ]);
-            echo "Orgão - {$orgao['nome']} Foi Criada com sucesso" . PHP_EOL;
+        } catch (\Exception $e) {
+            $this->job->fail($e);
+            echo $e->getMessage() . PHP_EOL;
         }
     }
 

@@ -12,10 +12,26 @@ class Edital extends Model
     protected $table = 'editais';
 
     protected $fillable = [
-        'ext_id', 'nome', 'id_banca', 'id_orgao', 'prazo_inscricao', 'ano', 'id_arquivo', 'data_inclusao',
-        'possui_guia', 'vagas', 'salario_inicial_de', 'salario_inicial_ate', 'taxa_inscricao_de', 'taxa_inscricao_ate',
-        'pagina_concurso', 'url', 'publicado', 'ficticio', 'cargo_nome', 'cargo_sigla', 'next_run', 
+        'ext_id',
+        'nome',
+        'id_banca',
+        'id_orgao',
+        'prazo_inscricao',
+        'ano',
+        'data_inclusao',
+        'vagas',
+        'salario_inicial_de',
+        'salario_inicial_ate',
+        'taxa_inscricao_de',
+        'taxa_inscricao_ate',
+        'pagina_concurso',
+        'url',
+        'publicado',
+        'ficticio',
+        'cargo_nome',
+        'cargo_sigla'
     ];
+    
 
     public function banca()
     {

@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
-class CargoComand extends Command
+class Cargo extends Command
 {
     /**
      * The name and signature of the console command.
@@ -40,9 +40,13 @@ class CargoComand extends Command
 
     public function handle()
     {
-        $orgaos = Orgao::where('next_cargo_run', '<', Carbon::now())->get();
+        $orgaos = Orgao::where(function ($query) {
+            $query->whereDate('next_cargo_run', '<', Carbon::now()->toDateString())
+                  ->orWhereNull('next_cargo_run');
+        })->get();
 
         foreach ($orgaos as $orgao) {
+            
             $this->dispatch(
                 new Cargos(
                     "https://www.tecconcursos.com.br/api/cargos",
@@ -52,5 +56,6 @@ class CargoComand extends Command
             $orgao->next_cargo_run = Carbon::now()->addDays(5);
             $orgao->save();
         }
+
     }
 }

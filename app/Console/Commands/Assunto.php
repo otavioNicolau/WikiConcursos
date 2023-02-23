@@ -12,6 +12,13 @@ use Carbon\Carbon;
 class Assunto extends Command
 {
     /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+
+    use DispatchesJobs;
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -25,14 +32,6 @@ class Assunto extends Command
      */
     protected $description = 'Realizar a coleta das informações referente aos assuntos no tec.';
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-
-    use DispatchesJobs;
-
 
     public function __construct()
     {
@@ -42,8 +41,10 @@ class Assunto extends Command
 
     public function handle()
     {
-        
-        $materias = Materia::where('next_run', '<', Carbon::now())->get();
+        $materias = Materia::where(function ($query) {
+            $query->whereDate('next_assuntos_run', '<', Carbon::now()->toDateString())
+                  ->orWhereNull('next_assuntos_run');
+        })->get();
 
         foreach ($materias as $materia) {
             $this->dispatch(
@@ -53,11 +54,10 @@ class Assunto extends Command
                 )
             );
 
+
+
             $materia->next_assuntos_run = Carbon::now()->addDays(5);
             $materia->save();
-            
         }
-
-
     }
 }

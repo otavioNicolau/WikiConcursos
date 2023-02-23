@@ -53,24 +53,21 @@ class Areas implements ShouldQueue
 
     protected function updateOrCreateArea($area)
     {
-        $areaModel = Area::where('ext_id', $area['id'])->first();
+    try {
+        $areaModel = Area::firstOrCreate(
+            ['ext_id' => $area['id']],
+        );
 
-        if ($areaModel) {
-            if ($areaModel->next_run < Carbon::now()) {
-                $areaModel->nome = $area['nome'];
-                $areaModel->hierarquia = $area['hierarquia'];
-                $areaModel->next_run = Carbon::now()->addDays(5);
-                $areaModel->save();
-                echo "Area - {$area['nome']} Atualizada com Sucesso!" . PHP_EOL;
-            }
-        } else {
-            Area::create([
-                'ext_id' => $area['id'],
-                'nome' => $area['nome'],
-                'hierarquia' => $area['hierarquia'],
-                'next_run' => Carbon::now()->addDays(5)
-            ]);
-            echo "Area - {$area['nome']} Foi Criada com sucesso" . PHP_EOL;
+        if ($areaModel->wasRecentlyCreated || $areaModel->next_run < Carbon::now()->toDateString()) {
+            $areaModel->nome = $area['nome'];
+            $areaModel->hierarquia = $area['hierarquia'];
+            $areaModel->next_run = Carbon::now()->addDays(5);
+            $areaModel->save();
+            echo "Area - {$area['nome']} Atualizada com Sucesso!" . PHP_EOL;
         }
+    } catch (\Exception $e) {
+        $this->job->fail($e);
+        echo $e->getMessage() . PHP_EOL;
     }
+}
 }

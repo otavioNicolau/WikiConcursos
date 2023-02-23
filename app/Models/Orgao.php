@@ -10,6 +10,16 @@ class Orgao extends Model
     use HasFactory;
 
     protected $fillable = [
-        'ext_id', 'nome', 'sigla', 'url', 'uuid_logo', 'orgao_regiao', 'orgao_uuid', 'caminho_logotipo_orgao', 'descricao'
+        'ext_id',
+        'nome',
+        'sigla',
+        'url',
+        'uuid_logo',
+        'orgao_regiao',
+        'descricao',
+        'next_run',
+        'next_cargo_run',
+        'gpt_worked'
     ];
+    
 }

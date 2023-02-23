@@ -68,24 +68,21 @@ class Materias implements ShouldQueue
 
     protected function updateOrCreateMateria($materia)
     {
-        $materiaModel = Materia::where('ext_id', $materia['id'])->first();
+        try {
+            $materiaModel = Materia::firstOrCreate(
+                ['ext_id' => $materia['id']],
+            );
 
-        if ($materiaModel) {
-            if ($materiaModel->next_run < Carbon::now()) {
+            if ($materiaModel->wasRecentlyCreated || $materiaModel->next_run < Carbon::now()->toDateString()) {
                 $materiaModel->nome = $materia['nome'];
                 $materiaModel->url = $materia['url'];
                 $materiaModel->next_run = Carbon::now()->addDays(5);
                 $materiaModel->save();
                 echo "MATERIA - {$materia['nome']} Atualizada com Sucesso!" . PHP_EOL;
             }
-        } else {
-            Materia::create([
-                'ext_id' => $materia['id'],
-                'nome' => $materia['nome'],
-                'url' => $materia['url'],
-                'next_run' => Carbon::now()->addDays(5)
-            ]);
-            echo "MATERIA - {$materia['nome']} Foi Criada com sucesso" . PHP_EOL;
+        } catch (\Exception $e) {
+            $this->job->fail($e);
+            echo $e->getMessage() . PHP_EOL;
         }
     }
 }

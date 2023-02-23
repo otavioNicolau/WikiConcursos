@@ -13,13 +13,13 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('comentarios', function (Blueprint $table) {
+        Schema::create('provas_questoes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('id_questao')->unique();
-            $table->string('data_publicacao_comentario');
-            $table->longText('comentario');
-            $table->longText('comentario_GPT')->nullable();
-            $table->boolean('gpt_worked')->default(false);
+            $table->unsignedInteger('concurso_id'); 
+            $table->text('prova_nome'); 
+            $table->integer('numero_questao'); 
+            $table->unsignedInteger('questao_id'); 
+            $table->text('cargo_nome')->nullable(); // cargoSigla // questao
             $table->timestamps();
         });
     }
@@ -31,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comentarios');
+        Schema::dropIfExists('provas_questoes');
     }
 };

@@ -10,6 +10,12 @@ class Banca extends Model
     use HasFactory;
 
     protected $fillable = [
-        'ext_id', 'nome', 'sigla', 'url', 'descricao'
+        'ext_id',
+        'nome',
+        'sigla',
+        'url',
+        'descricao',
+        'next_run'
     ];
+    
 }

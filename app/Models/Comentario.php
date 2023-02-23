@@ -10,6 +10,11 @@ class Comentario extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id_questao', 'data_publicacao_comentario', 'comentario'
+        'id_questao',
+        'data_publicacao_comentario',
+        'comentario',
+        'comentario_GPT',
+        'gpt_worked',
     ];
+    
 }

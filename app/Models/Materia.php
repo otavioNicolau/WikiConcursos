@@ -10,6 +10,10 @@ class Materia extends Model
     use HasFactory;
 
     protected $fillable = [
-        'ext_id', 'nome', 'url', 'descricao'
+        'ext_id',
+        'nome',
+        'url',
+        'descricao',
     ];
+    
 }

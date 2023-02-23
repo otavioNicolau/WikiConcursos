@@ -53,22 +53,20 @@ class Profissoes implements ShouldQueue
 
     protected function updateOrCreateProfissao($profissao)
     {
-        $profissaoModel = Profissao::where('ext_id', $profissao['id'])->first();
+        try {
+            $profissaoModel = Profissao::firstOrCreate(
+                ['ext_id' => $profissao['id']],
+            );
 
-        if ($profissaoModel) {
-            if ($profissaoModel->next_run < Carbon::now()) {
+            if ($profissaoModel->wasRecentlyCreated || $profissaoModel->next_run < Carbon::now()->toDateString()) {
                 $profissaoModel->nome = $profissao['nome'];
                 $profissaoModel->next_run = Carbon::now()->addDays(5);
                 $profissaoModel->save();
                 echo "Profissão - {$profissao['nome']} Atualizada com Sucesso!" . PHP_EOL;
             }
-        } else {
-            Profissao::create([
-                'ext_id' => $profissao['id'],
-                'nome' => $profissao['nome'],
-                'next_run' => Carbon::now()->addDays(5)
-            ]);
-            echo "Profissão - {$profissao['nome']} Foi Criada com sucesso" . PHP_EOL;
+        } catch (\Exception $e) {
+            $this->job->fail($e);
+            echo $e->getMessage() . PHP_EOL;
         }
     }
 }

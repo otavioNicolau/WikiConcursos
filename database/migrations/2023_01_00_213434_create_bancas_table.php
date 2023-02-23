@@ -20,7 +20,7 @@ return new class extends Migration
             $table->index('nome');
             $table->string('sigla');
             $table->string('url');
-            $table->boolean('gpt_worked')->default(false)->change();
+            $table->boolean('gpt_worked')->default(false);
             $table->longText('descricao')->nullable();
             $table->date('next_run')->nullable();
             $table->timestamps();            

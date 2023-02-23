@@ -64,7 +64,11 @@ class Comentario extends Command
             'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
         ];
 
-        $questoes = Questao::where('next_comentario_run', '<', Carbon::now())->get();
+        $questoes = Questao::where(function ($query) {
+            $query->whereDate('next_comentario_run', '<', Carbon::now()->toDateString())
+                  ->orWhereNull('next_comentario_run');
+        })->get();
+
 
         foreach ($questoes as $questao) {
             $this->dispatch(

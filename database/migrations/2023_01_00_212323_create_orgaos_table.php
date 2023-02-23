@@ -15,15 +15,15 @@ return new class () extends Migration {
         Schema::create('orgaos', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('ext_id')->unique();
-            $table->string('nome');
-            $table->string('sigla');
-            $table->string('url');
-            $table->text('uuid_logo');
-            $table->string('orgao_regiao')->nullable(); // VEM DA REQUISIÇÃO EDITAIS
+            $table->string('nome')->nullable();
+            $table->string('sigla')->nullable();
+            $table->string('url')->nullable();
+            $table->text('uuid_logo')->nullable();
+            $table->string('orgao_regiao')->nullable();
             $table->longText('descricao')->nullable();
             $table->date('next_run')->nullable();
             $table->date('next_cargo_run')->nullable();
-            $table->boolean('gpt_worked')->default(false)->change();
+            $table->boolean('gpt_worked')->default(false);
             $table->timestamps();
         });
     }

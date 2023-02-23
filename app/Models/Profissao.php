@@ -12,6 +12,11 @@ class Profissao extends Model
     protected $table = 'profissoes';
 
     protected $fillable = [
-        'ext_id', 'nome', 'descricao'
+        'ext_id',
+        'nome',
+        'descricao',
+        'gpt_worked',
+        'next_run',
     ];
+    
 }

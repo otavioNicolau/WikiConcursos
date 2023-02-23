@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('provas', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('ext_id')->unique();
+            $table->string('ext_id');
             $table->unsignedInteger('concurso_id')->nullable();
             $table->text('nome')->nullable();
             $table->date('next_run')->nullable();

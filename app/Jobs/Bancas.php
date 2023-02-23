@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Models\banca;
+use App\Models\Banca;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
@@ -57,10 +57,12 @@ class Bancas implements ShouldQueue
 
     protected function updateOrCreateBanca($banca)
     {
-        $bancaModel = banca::where('ext_id', $banca['id'])->first();
+        try {
+            $bancaModel = Banca::firstOrCreate(
+                ['ext_id' => $banca['id']],
+            );
 
-        if ($bancaModel) {
-            if ($bancaModel->next_run < Carbon::now()) {
+            if ($bancaModel->wasRecentlyCreated || $bancaModel->next_run < Carbon::now()->toDateString()) {
                 $bancaModel->nome = $banca['nome'];
                 $bancaModel->sigla = $banca['sigla'];
                 $bancaModel->url = $banca['url'];
@@ -68,15 +70,9 @@ class Bancas implements ShouldQueue
                 $bancaModel->save();
                 echo "Banca - {$banca['nome']} Atualizada com Sucesso!" . PHP_EOL;
             }
-        } else {
-            banca::create([
-                'ext_id' => $banca['id'],
-                'nome' => $banca['nome'],
-                'sigla' => $banca['sigla'],
-                'url' => $banca['url'],
-                'next_run' => Carbon::now()->addDays(5)
-            ]);
-            echo "Banca - {$banca['nome']} Foi Criada com sucesso" . PHP_EOL;
+        } catch (\Exception $e) {
+            $this->job->fail($e);
+            echo $e->getMessage() . PHP_EOL;
         }
     }
 }

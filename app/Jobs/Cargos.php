@@ -15,7 +15,11 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class Cargos implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     protected $url;
     protected $orgao_id;
@@ -45,7 +49,6 @@ class Cargos implements ShouldQueue
             $statusCode = $response->getStatusCode();
 
             if ($statusCode == 200) {
-
                 $data = json_decode($response->getBody(), true);
                 $cargos = $data['cargos'];
 
@@ -74,28 +77,26 @@ class Cargos implements ShouldQueue
 
     protected function updateOrCreatecargo($cargo, $descendentes_de = 0)
     {
-        $cargoModel = Cargo::where('ext_id', $cargo['id'])->first();
+        try {
+            $cargoModel = Cargo::firstOrCreate(
+                ['ext_id' => $cargo['id']],
+                [
+                    'orgao_id' =>$this->orgao_id
+                ]
+            );
 
-        if ($cargoModel) {
-            $cargoModel->nome = $cargo['nome'];
-            $cargoModel->orgao_id = $this->orgao_id;
-            $cargoModel->tipo = $cargo['tipo'];
-            $cargoModel->title = array_key_exists('title', $cargo) ? $cargo['title'] : " * ";
-            $cargoModel->descendentes_de = $descendentes_de;
-            $cargoModel->next_run  = Carbon::now()->addDays(5);
-            $cargoModel->save();
-            echo "Cargo - {$cargo['nome']} Atualizada com Sucesso!" . PHP_EOL;
-        } else {
-            Cargo::create([
-                'ext_id' => $cargo['id'],
-                'nome' => $cargo['nome'],
-                'orgao_id' => $this->orgao_id,
-                'tipo' => $cargo['tipo'],
-                'title' => array_key_exists('title', $cargo) ? $cargo['title'] : " * ",
-                'descendentes_de' => $descendentes_de,
-                'next_run' => Carbon::now()->addDays(5)
-            ]);
-            echo "Cargo - {$cargo['nome']} Foi Criada com sucesso" . PHP_EOL;
+            if ($cargoModel->wasRecentlyCreated || $cargoModel->next_run < Carbon::now()->toDateString()) {
+                $cargoModel->nome = $cargo['nome'];
+                $cargoModel->tipo = $cargo['tipo'];
+                $cargoModel->title = array_key_exists('title', $cargo) ? $cargo['title'] : " * ";
+                $cargoModel->descendentes_de = $descendentes_de;
+                $cargoModel->next_run  = Carbon::now()->addDays(5);
+                $cargoModel->save();
+                echo "Cargo - {$cargo['nome']} Atualizada com Sucesso!" . PHP_EOL;
+            }
+        } catch (\Exception $e) {
+            $this->job->fail($e);
+            echo $e->getMessage() . PHP_EOL;
         }
     }
 }

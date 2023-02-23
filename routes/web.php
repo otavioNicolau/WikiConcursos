@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Concurso;
 use App\Models\Edital;
 use App\Models\Escolaridade;
 use App\Models\Orgao;
@@ -47,12 +48,23 @@ Route::get('/questao', function () {
         ',
     ]);
 
-    echo $result['choices'][0]['text']; 
+    echo $result['choices'][0]['text'];
 });
 
+Route::get('/teste', function () {
+
+    $editalModel = Concurso::where('ext_id', 68019)->first();
+  //  dd($editalModel);
+
+  if ($editalModel && $editalModel->exists()) { 
+   echo "sim"; // Registro encontrado
+    } else {
+    echo "não"; 
+    // Registro não encontrado
+    }
+});
 
 Route::get('/termos', function () {
-
     $result = OpenAI::completions()->create([
         'model' => 'text-davinci-003',
         'max_tokens' => 2060,
@@ -70,28 +82,124 @@ Route::get('/termos', function () {
         ',
     ]);
 
-    echo $result['choices'][0]['text']; 
+    echo $result['choices'][0]['text'];
 });
 
-Route::get('/x', function () {
-
-    $editalModel = Edital::where('ext_id', 10217)->first();
-
-    
-
-    if($editalModel->next_run < Carbon::now()){
-        echo 'true';
-    }
-
-
-
-
-    if($editalModel == null){
-        echo 'null';
-    }
-
+Route::get('/l', function () {
+    $endPoint = "http://localhost/mediawiki/api.php";
+    $login_Token = getLoginToken($endPoint); // Step 1
+    loginRequest($login_Token); // Step 2
+    $csrf_Token = getCSRFToken($endPoint); // Step 3
+    editRequest($csrf_Token, $endPoint); // Step 4
 });
 
 Route::prefix('/jobs')->group(function () {
     Route::queueMonitor();
 });
+
+function getLoginToken($endPoint)
+{
+    $params1 = [
+        "action" => "query",
+        "meta" => "tokens",
+        "type" => "login",
+        "format" => "json"
+    ];
+
+    $url = $endPoint . "?" . http_build_query($params1);
+
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_COOKIEJAR, "/tmp/cookie.txt");
+    curl_setopt($ch, CURLOPT_COOKIEFILE, "/tmp/cookie.txt");
+
+    $output = curl_exec($ch);
+    curl_close($ch);
+
+    $result = json_decode($output, true);
+    return $result["query"]["tokens"]["logintoken"];
+}
+
+function loginRequest($logintoken)
+{
+    global $endPoint;
+
+    $params2 = [
+        "action" => "login",
+        "lgname" => "Otavio.gatz",
+        "lgpassword" => "442800442800",
+        "lgtoken" => $logintoken,
+        "format" => "json"
+    ];
+
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $endPoint);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params2));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_COOKIEJAR, "/tmp/cookie.txt");
+    curl_setopt($ch, CURLOPT_COOKIEFILE, "/tmp/cookie.txt");
+
+    $output = curl_exec($ch);
+    curl_close($ch);
+
+    echo($output);
+}
+
+// Step 3: GET request to fetch CSRF token
+function getCSRFToken($endPoint)
+{
+    $params3 = [
+        "action" => "query",
+        "meta" => "tokens",
+        "format" => "json"
+    ];
+
+    $url = $endPoint . "?" . http_build_query($params3);
+
+    $ch = curl_init($url);
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_COOKIEJAR, "cookie.txt");
+    curl_setopt($ch, CURLOPT_COOKIEFILE, "cookie.txt");
+
+    $output = curl_exec($ch);
+    curl_close($ch);
+
+    $result = json_decode($output, true);
+    return $result["query"]["tokens"]["csrftoken"];
+}
+
+// Step 4: POST request to edit a page
+function editRequest($csrftoken, $endPoint)
+{
+    $params4 = [
+        "action" => "edit",
+        "title" => "Questão10",
+        "appendtext" => "{{Questão
+| pergunta        = 1Qual é a capital do Brasil?
+| resposta        = 1Brasília
+| categoria       = 1Geografia
+| dificuldade     = 1Fácil
+| ano             = 12020
+}}",
+        "token" => $csrftoken,
+        "format" => "json",
+        "createonly" =>"true"
+    ];
+
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, $endPoint);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($params4));
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_COOKIEJAR, "cookie.txt");
+    curl_setopt($ch, CURLOPT_COOKIEFILE, "cookie.txt");
+
+    $output = curl_exec($ch);
+    curl_close($ch);
+
+    echo($output);
+}

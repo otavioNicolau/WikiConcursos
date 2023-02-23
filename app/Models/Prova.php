@@ -11,8 +11,12 @@ class Prova extends Model
 
     protected $table = 'provas';
     protected $fillable = [
-        'ext_id', 'concurso_id', 'nome', 'next_run'
+        'ext_id',
+        'concurso_id',
+        'nome',
+        'next_run'
     ];
+    
 
 
 }

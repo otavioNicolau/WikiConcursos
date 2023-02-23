@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Jobs;
+
 use App\Models\Assunto;
 use Carbon\Carbon;
 use GuzzleHttp\Client;
@@ -13,7 +14,11 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class Assuntos implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     protected $url;
     protected $materiaID;
@@ -42,7 +47,6 @@ class Assuntos implements ShouldQueue
             $statusCode = $response->getStatusCode();
 
             if ($statusCode == 200) {
-
                 $data = json_decode($response->getBody(), true);
                 $assuntos = $data['assuntos'];
 
@@ -57,26 +61,25 @@ class Assuntos implements ShouldQueue
 
     protected function updateOrCreateAssunto($assunto)
     {
-        $assuntoModel = Assunto::where('ext_id', $assunto['id'])->first();
+        try {
+            $assuntoModel = Assunto::firstOrCreate(
+                ['ext_id' => $assunto['id']],
+                [
+                    'materia_id' => $assunto['materia']['id'],
+                    ]
+            );
 
-        if ($assuntoModel) {
-            $assuntoModel->nome = $assunto['nome'];
-            $assuntoModel->materia_id = $assunto['materia']['id'];
-            $assuntoModel->hierarquia = $assunto['hierarquia'];
-            $assuntoModel->descendentes = $assunto['descendentes'];
-            $assuntoModel->next_run = Carbon::now()->addDays(5);
-            $assuntoModel->save();
-            echo "ASSUNTO - {$assunto['nome']} Atualizada com Sucesso!" . PHP_EOL;
-        } else {
-            Assunto::create([
-                'ext_id' => $assunto['id'],
-                'nome' => $assunto['nome'],
-                'materia_id' => $assunto['materia']['id'],
-                'hierarquia' => $assunto['hierarquia'],
-                'descendentes' => $assunto['descendentes'],
-                'next_run' => Carbon::now()->addDays(5),
-            ]);
-            echo "ASSUNTO - {$assunto['nome']} Foi Criada com sucesso" . PHP_EOL;
+            if ($assuntoModel->wasRecentlyCreated || $assuntoModel->next_run < Carbon::now()->toDateString()) {
+                $assuntoModel->nome = $assunto['nome'];
+                $assuntoModel->hierarquia = $assunto['hierarquia'];
+                $assuntoModel->descendentes = $assunto['descendentes'];
+                $assuntoModel->next_run = Carbon::now()->addDays(5);
+                $assuntoModel->save();
+                echo "ASSUNTO - {$assunto['nome']} Atualizada com Sucesso!" . PHP_EOL;
+            }
+        } catch (\Exception $e) {
+            $this->job->fail($e);
+            echo $e->getMessage() . PHP_EOL;
         }
     }
 }

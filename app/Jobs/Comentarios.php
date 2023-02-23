@@ -17,7 +17,11 @@ use romanzipp\QueueMonitor\Traits\IsMonitored;
 
 class Comentarios implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels, IsMonitored;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
+    use IsMonitored;
 
     protected $url;
     protected $id_questao;
@@ -46,7 +50,6 @@ class Comentarios implements ShouldQueue
             $statusCode = $response->getStatusCode();
 
             if ($statusCode == 200) {
-
                 $data = json_decode($response->getBody(), true);
                 $comentario = $data['comentario'];
                 $this->updateOrCreateComentario($comentario, $this->id_questao);
@@ -66,22 +69,21 @@ class Comentarios implements ShouldQueue
 
     protected function updateOrCreateComentario($comentario, $id_questao)
     {
-        $comentarioModel = Comentario::where('id_questao', $id_questao)->first();
+        try {
+            $comentarioModel = Comentario::firstOrCreate(
+                ['id_questao' =>  $id_questao],
+            );
 
-        if ($comentarioModel) {
-            $comentarioModel->comentario = $comentario['textoComentario'];
-            $comentarioModel->data_publicacao_comentario = $comentario['dataPublicacaoComentario'];
-            $comentarioModel->next_run = Carbon::now()->addDays(5);
-            $comentarioModel->save();
-            echo "Comentario da Questão - {$id_questao} Atualizada com Sucesso!" . PHP_EOL;
-        } else {
-            Comentario::create([
-                'comentario' => $comentario['textoComentario'],
-                'data_publicacao_comentario' => $comentario['dataPublicacaoComentario'],
-                'id_questao' => $id_questao,
-                'next_run' => Carbon::now()->addDays(5)
-            ]);
-            echo "Comentario da Questão - {$id_questao} Foi Criada com sucesso" . PHP_EOL;
+            if ($comentarioModel->wasRecentlyCreated || $comentarioModel->next_run < Carbon::now()->toDateString()) {
+                $comentarioModel->comentario = $comentario['textoComentario'];
+                $comentarioModel->data_publicacao_comentario = $comentario['dataPublicacaoComentario'];
+                $comentarioModel->next_run = Carbon::now()->addDays(5);
+                $comentarioModel->save();
+                echo "Comentario da Questão - {$id_questao} Atualizada com Sucesso!" . PHP_EOL;
+            }
+        } catch (\Exception $e) {
+            $this->job->fail($e);
+            echo $e->getMessage() . PHP_EOL;
         }
     }
 }

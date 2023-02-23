@@ -56,22 +56,20 @@ class Escolaridades implements ShouldQueue
 
     protected function updateOrCreateEscolaridade($escolaridade)
     {
-        $escolaridadeModel = Escolaridade::where('ext_id', $escolaridade['id'])->first();
+        try {
+            $escolaridadeModel = Escolaridade::firstOrCreate(
+                ['ext_id' => $escolaridade['id']],
+            );
 
-        if ($escolaridadeModel) {
-            if ($escolaridadeModel->next_run < Carbon::now()) {
+            if ($escolaridadeModel->wasRecentlyCreated || $escolaridadeModel->next_run < Carbon::now()->toDateString()) {
                 $escolaridadeModel->nome = $escolaridade['nome'];
                 $escolaridadeModel->next_run = Carbon::now()->addDays(5);
                 $escolaridadeModel->save();
                 echo "Escolaridade - {$escolaridade['nome']} Atualizada com Sucesso!" . PHP_EOL;
             }
-        } else {
-            Escolaridade::create([
-                'ext_id' => $escolaridade['id'],
-                'nome' => $escolaridade['nome'],
-                'next_run' => Carbon::now()->addDays(5)
-            ]);
-            echo "Escolaridade - {$escolaridade['nome']} Foi Criada com sucesso" . PHP_EOL;
+        } catch (\Exception $e) {
+            $this->job->fail($e);
+            echo $e->getMessage() . PHP_EOL;
         }
     }
 }

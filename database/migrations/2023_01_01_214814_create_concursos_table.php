@@ -25,8 +25,10 @@ return new class extends Migration
             $table->string('arquivo_edital')->nullable();
             $table->string('nome_completo')->nullable();
             $table->string('url_concurso')->nullable();
-            $table->string('area')->nullable(); // vem da questão
+            $table->string('area')->nullable(); 
+            $table->string('especialidade')->nullable(); 
             $table->date('next_run')->nullable();
+            $table->date('next_provas_run')->nullable();
             $table->timestamps(); 
 
         });

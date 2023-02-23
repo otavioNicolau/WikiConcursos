@@ -10,6 +10,15 @@ class Cargo extends Model
     use HasFactory;
 
     protected $fillable = [
-        'ext_id', 'orgao_id', 'nome', 'tipo', 'descendentes_de', 'title'
+        'ext_id',
+        'orgao_id',
+        'nome',
+        'tipo',
+        'descendentes_de',
+        'descricao',
+        'title',
+        'next_run',
+        'gpt_worked'
     ];
+    
 }

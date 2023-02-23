@@ -17,13 +17,13 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('ext_id')->unique();
             $table->unsignedInteger('orgao_id');
-            $table->string('nome');
-            $table->string('tipo');
+            $table->string('nome')->nullable();
+            $table->string('tipo')->nullable();
             $table->string('descendentes_de')->nullable();
             $table->longText('descricao')->nullable();
             $table->string('title')->nullable();
             $table->date('next_run')->nullable();
-            $table->boolean('gpt_worked')->default(false)->change();
+            $table->boolean('gpt_worked')->default(false);
             $table->timestamps();
         });
     }

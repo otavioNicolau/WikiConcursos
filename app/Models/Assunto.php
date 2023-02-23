@@ -7,9 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Assunto extends Model
 {
-    protected $table = 'assuntos';
     use HasFactory;
-
+    protected $table = 'assuntos';
 
     protected $fillable = [
         'ext_id',
@@ -18,6 +17,8 @@ class Assunto extends Model
         'hierarquia',
         'descendentes',
         'descricao',
+        'next_run',
+        'gpt_worked'
     ];
 
     public function materia()
