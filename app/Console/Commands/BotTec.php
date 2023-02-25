@@ -40,13 +40,13 @@ class BotTec extends Command
         $this->info('Iniciando a coleta de dados...');
 
         $commands = [
-            'bot:profissao', // SEM DEPENDENCIA
-            'bot:area', // SEM DEPENDENCIA
-            'bot:banca', // SEM DEPENDENCIA
-            'bot:edital', // SEM DEPENDENCIA 
-            'bot:escolaridade', // SEM DEPENDENCIA
-            'bot:materia', // SEM DEPENDENCIA
-            'bot:orgao', // SEM DEPENDENCIA
+            'bot:profissao', // SEM DEPENDENCIA x
+            'bot:area', // SEM DEPENDENCIA x
+            'bot:banca', // SEM DEPENDENCIA x
+            'bot:edital', // SEM DEPENDENCIA  x
+            'bot:escolaridade', // SEM DEPENDENCIA x
+            'bot:materia', // SEM DEPENDENCIA x 
+            'bot:orgao', // SEM DEPENDENCIA x
             'bot:prova', //  CONCURSO
             'bot:questao', //  PROVAS
             'bot:assunto', // MATERIA

@@ -7,7 +7,10 @@ use App\Models\Orgao;
 use App\Models\Questao;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use OpenAI\Laravel\Facades\OpenAI;
+use App\Services\StorageService;
+use GuzzleHttp\Client;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,6 +22,56 @@ use OpenAI\Laravel\Facades\OpenAI;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/aws', function () {
+  
+    $file_url = 'https://www.tecconcursos.com.br/download/edital-n-1-agermt-de-1-de-fevereiro-de-2023-ager-mt-2023'; // URL do arquivo a ser baixado
+
+    $path = 'teste';
+    try {
+        $client = new Client();
+        $response = $client->get($file_url, []);
+
+        if ($response->getStatusCode() == 200) {
+            $fileContents = $response->getBody()->getContents();
+            $fileLengthWeb = $response->getHeader('Content-Length');
+            $fileType = $response->getHeader('Content-Type');
+
+            $extension = '';
+            if ($fileType[0] == "application/pdf") {
+                $extension = ".pdf";
+            } elseif ($fileType[0] == "image/jpeg" || $fileType[0] == "image/pjpeg" || $fileType[0] == "image/jpeg" || $fileType[0] == "image/pjpeg") {
+                $extension = ".jpg";
+            } elseif ($fileType[0] == "image/png") {
+                $extension = ".png";
+            } elseif ($fileType == "image/gif") {
+                $extension = ".gif";
+            } elseif ($fileType[0] == "application/zip") {
+                $extension = ".zip";
+            } elseif ($fileType[0] == "application/x-rar-compressed") {
+                $extension = ".rar";
+            } elseif ($fileType[0] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
+                $extension = ".docx";
+            } elseif ($fileType[0] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+                $extension = ".xlsx";
+            } elseif ($fileType[0] == "application/vnd.openxmlformats-officedocument.presentationml.presentation") {
+                $extension = ".pptx";
+            } else {
+                $extension = ".jpgx";
+            }
+
+            $fileName = basename($file_url);
+            echo $fileName;
+
+            if (!Storage::disk('s3')->exists($path . "/" . $fileName) || Storage::disk('s3')->size($path . "/" . $fileName) !=  $fileLengthWeb[0]) {
+                Storage::disk('s3')->put($path . "/" . $fileName, $fileContents);
+            }
+        }
+    } catch (\Exception $e) {
+        $this->job->fail($e);
+        echo $e->getMessage() . PHP_EOL;
+    }
+});
+
 
 Route::get('/questao', function () {
     $result = OpenAI::completions()->create([
@@ -51,18 +104,6 @@ Route::get('/questao', function () {
     echo $result['choices'][0]['text'];
 });
 
-Route::get('/teste', function () {
-
-    $editalModel = Concurso::where('ext_id', 68019)->first();
-  //  dd($editalModel);
-
-  if ($editalModel && $editalModel->exists()) { 
-   echo "sim"; // Registro encontrado
-    } else {
-    echo "não"; 
-    // Registro não encontrado
-    }
-});
 
 Route::get('/termos', function () {
     $result = OpenAI::completions()->create([

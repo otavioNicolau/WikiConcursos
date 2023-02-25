@@ -70,20 +70,20 @@ class Questao extends Command
             'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/109.0.0.0 Safari/537.36'
         ];
 
-        
+
         $questoes = QuestaoModel::where(function ($query) {
             $query->whereDate('next_run', '<', Carbon::now()->toDateString())
                   ->orWhereNull('next_run');
         })->get();
 
         foreach ($questoes as $questao) {
-            $this->dispatch(
-                new Questoes(
-                    "https://www.tecconcursos.com.br/api/questoes/{$questao->ext_id}/resolucao",
-                    $data,
-                    $headers
-                )
+            $job = new Questoes(
+                "https://www.tecconcursos.com.br/api/questoes/{$questao->ext_id}/resolucao",
+                $data,
+                $headers
             );
+            $job->onQueue('areas');
+            $this->dispatch($job);
 
             $questao->next_run = Carbon::now()->addDays(5);
             $questao->save();

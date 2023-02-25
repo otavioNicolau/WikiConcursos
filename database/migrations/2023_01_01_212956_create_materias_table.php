@@ -16,8 +16,8 @@ return new class extends Migration
         Schema::create('materias', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('ext_id')->unique();
-            $table->string('nome');
-            $table->string('url');
+            $table->string('nome')->nullable();
+            $table->string('url')->nullable();
             $table->longText('descricao')->nullable();
             $table->boolean('gpt_worked')->default(false);
             $table->date('next_run')->nullable();

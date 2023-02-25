@@ -39,19 +39,19 @@ class Prova extends Command
 
     public function handle()
     {
-        
         $concuros = Concurso::where(function ($query) {
             $query->whereDate('next_provas_run', '<', Carbon::now()->toDateString())
                   ->orWhereNull('next_provas_run');
         })->get();
 
         foreach ($concuros as $concuro) {
-            $this->dispatch(
-                new Provas(
-                    "https://www.tecconcursos.com.br/api/concursos/questoes/{$concuro->ext_id}/provas",
-                    $concuro->ext_id
-                )
+            $job = new Provas(
+                "https://www.tecconcursos.com.br/api/concursos/questoes/{$concuro->ext_id}/provas",
+                $concuro->ext_id
             );
+            $job->onQueue('provas');
+            $this->dispatch($job);
+
             $concuro->next_provas_run = Carbon::now()->addDays(5);
             $concuro->save();
         }

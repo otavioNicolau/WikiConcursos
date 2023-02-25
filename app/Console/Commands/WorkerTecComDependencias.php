@@ -2,11 +2,10 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\Bancas;
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
-class Banca extends Command
+class WorkerTecComDependencias extends Command
 {
     /**
      * Execute the console command.
@@ -20,14 +19,14 @@ class Banca extends Command
      *
      * @var string
      */
-    protected $signature = 'bot:banca';
+    protected $signature = 'worker:com-dependencias';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Realizar a coleta das informações referente as bancas no tec.';
+    protected $description = 'Iniciar a Execução de todos os JOBS';
 
 
     public function __construct()
@@ -37,8 +36,10 @@ class Banca extends Command
 
     public function handle()
     {
-        $job = new Bancas("https://www.tecconcursos.com.br/api/bancas");
-        $job->onQueue('bancas');
-        $this->dispatch($job);
+        $this->info('Iniciando o WORKER dos modulos que precisam de dependencias.');
+        $this->info("assuntos,cargos");
+        $this->call('queue:work', [
+            '--queue' => 'assuntos,cargos'
+        ]);
     }
 }

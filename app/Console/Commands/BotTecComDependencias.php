@@ -2,26 +2,24 @@
 
 namespace App\Console\Commands;
 
-use App\Jobs\Areas;
-
 use Illuminate\Console\Command;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 
-class Area extends Command
+class BotTecComDependencias extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'bot:area';
+    protected $signature = 'bot:com-dependencias';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Realizar a coleta das informações referente as área no tec.';
+    protected $description = 'Iniciar a Execução de todos os JOBS';
 
     /**
      * Execute the console command.
@@ -39,9 +37,17 @@ class Area extends Command
 
     public function handle()
     {
-        $job = new Areas("https://www.tecconcursos.com.br/api/enums/areas");
-        $job->onQueue('areas');
-        $this->dispatch($job);
-       // $this->dispatch(new Areas("https://www.tecconcursos.com.br/api/enums/areas"))->onQueue('areas');
+        $this->info('Iniciando os modulos de coleta de dados no tec com dependencia...');
+
+        $commands = [
+            'bot:assunto', 
+            'bot:cargo', 
+        ];
+
+        foreach ($commands as $command) {
+            $this->info("INICIANDO O MODULO {$command}");
+            $this->call($command);
+        }
+
     }
 }

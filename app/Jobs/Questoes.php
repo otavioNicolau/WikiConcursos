@@ -64,7 +64,12 @@ class Questoes implements ShouldQueue
         }
     }
 
-
+    public function middleware()
+    {
+        return [
+            new RateLimited('questoes')
+        ];
+    }
 
     protected function updateOrCreateQuestao($questao)
     {

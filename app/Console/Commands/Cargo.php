@@ -11,6 +11,13 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 class Cargo extends Command
 {
     /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+
+    use DispatchesJobs;
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -23,14 +30,6 @@ class Cargo extends Command
      * @var string
      */
     protected $description = 'Realizar a coleta das informações referente as cargo no tec.';
-
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-
-    use DispatchesJobs;
 
 
     public function __construct()
@@ -47,15 +46,15 @@ class Cargo extends Command
 
         foreach ($orgaos as $orgao) {
             
-            $this->dispatch(
-                new Cargos(
-                    "https://www.tecconcursos.com.br/api/cargos",
-                    $orgao->ext_id
-                )
+            $job =  new Cargos(
+                "https://www.tecconcursos.com.br/api/cargos",
+                $orgao->ext_id
             );
+            $job->onQueue('cargos');
+            $this->dispatch($job);
+
             $orgao->next_cargo_run = Carbon::now()->addDays(5);
             $orgao->save();
         }
-
     }
 }

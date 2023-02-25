@@ -71,13 +71,15 @@ class Comentario extends Command
 
 
         foreach ($questoes as $questao) {
-            $this->dispatch(
-                new Comentarios(
-                    "https://www.tecconcursos.com.br/api/questoes/{$questao->ext_id}/comentario",
-                    $questao->ext_id,
-                    $headers
-                )
+
+            $job =  new Comentarios(
+                "https://www.tecconcursos.com.br/api/questoes/{$questao->ext_id}/comentario",
+                $questao->ext_id,
+                $headers
             );
+            $job->onQueue('comentarios');
+            $this->dispatch($job);
+
             $questao->next_comentario_run = Carbon::now()->addDays(5);
             $questao->save();
         }

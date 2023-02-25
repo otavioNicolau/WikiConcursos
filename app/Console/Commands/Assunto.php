@@ -47,14 +47,12 @@ class Assunto extends Command
         })->get();
 
         foreach ($materias as $materia) {
-            $this->dispatch(
-                new Assuntos(
-                    "https://www.tecconcursos.com.br/api/assuntos",
-                    $materia->ext_id
-                )
+            $job = new Assuntos(
+                "https://www.tecconcursos.com.br/api/assuntos",
+                $materia->ext_id
             );
-
-
+            $job->onQueue('assuntos');
+            $this->dispatch($job);
 
             $materia->next_assuntos_run = Carbon::now()->addDays(5);
             $materia->save();

@@ -71,7 +71,9 @@ class Editais implements ShouldQueue
 
             if ($this->num == 1) {
                 for ($i = 2; $i <= $totalPages; $i++) {
-                    dispatch(new Editais($this->url, $i));
+                    $job = new Editais($this->url, $i);
+                    $job->onQueue('editais');
+                    dispatch($job);
                 }
             }
         } catch (\Exception $e) {
@@ -83,7 +85,7 @@ class Editais implements ShouldQueue
     public function middleware()
     {
         return [
-            new RateLimited('cargos')
+            new RateLimited('editais')
         ];
     }
 
@@ -191,6 +193,21 @@ class Editais implements ShouldQueue
     }
 
 
+    protected function updateOrCreateOrgao($edital)
+    {
+        try {
+            Orgao::firstOrCreate(
+                ['ext_id' => $edital['idOrgao']],
+                ['orgao_regiao' => $edital['orgaoRegiao']],
+            );
+            echo "Orgão - {$edital['orgaoNome']} Atualizado com Sucesso!" . PHP_EOL;
+        } catch (\Exception $e) {
+            $this->job->fail($e);
+            echo $e->getMessage() . PHP_EOL;
+        }
+    }
+
+
     protected function downloadFile($file_url, $path)
     {
         try {
@@ -200,53 +217,12 @@ class Editais implements ShouldQueue
             if ($response->getStatusCode() == 200) {
                 $fileContents = $response->getBody()->getContents();
                 $fileLengthWeb = $response->getHeader('Content-Length');
-                $fileType = $response->getHeader('Content-Type');
-                $extension = '';
-                if ($fileType[0] == "application/pdf") {
-                    $extension = ".pdf";
-                } elseif ($fileType[0] == "image/jpeg" || $fileType[0] == "image/pjpeg" || $fileType[0] == "image/jpeg" || $fileType[0] == "image/pjpeg") {
-                    $extension = ".jpg";
-                } elseif ($fileType[0] == "image/png") {
-                    $extension = ".png";
-                } elseif ($fileType == "image/gif") {
-                    $extension = ".gif";
-                } elseif ($fileType[0] == "application/x-zip-compressed") {
-                    $extension = ".zip";
-                } elseif ($fileType[0] == "application/zip") {
-                    $extension = ".zip";
-                } elseif ($fileType[0] == "application/rar") {
-                    $extension = ".rar";
-                } elseif ($fileType[0] == "application/vnd.openxmlformats-officedocument.wordprocessingml.document") {
-                    $extension = ".docx";
-                } elseif ($fileType[0] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
-                    $extension = ".xlsx";
-                } elseif ($fileType[0] == "application/vnd.openxmlformats-officedocument.presentationml.presentation") {
-                    $extension = ".pptx";
-                } else {
-                    $extension = ".jpg";
-                }
+                $fileName = basename($file_url);
 
-                $fileName = basename($file_url) . $extension;
-
-                if (!Storage::exists($path . "/" . $fileName) || Storage::size($path . "/" . $fileName) !=  $fileLengthWeb[0]) {
-                    Storage::disk('local')->put($path . "/" . $fileName, $fileContents);
+                if (!Storage::disk('s3')->exists($path . "/" . $fileName) || Storage::disk('s3')->size($path . "/" . $fileName) !=  $fileLengthWeb[0]) {
+                    Storage::disk('s3')->put($path . "/" . $fileName, $fileContents);
                 }
             }
-        } catch (\Exception $e) {
-            $this->job->fail($e);
-            echo $e->getMessage() . PHP_EOL;
-        }
-    }
-
-
-    protected function updateOrCreateOrgao($edital)
-    {
-        try {
-            Orgao::firstOrCreate(
-                ['ext_id' => $edital['idOrgao']],
-                ['orgao_regiao' => $edital['orgaoRegiao']],
-            );
-            echo "Orgão - {$edital['orgaoNome']} Atualizado com Sucesso!" . PHP_EOL;
         } catch (\Exception $e) {
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;

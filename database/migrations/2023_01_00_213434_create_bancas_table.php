@@ -16,10 +16,9 @@ return new class extends Migration
         Schema::create('bancas', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('ext_id')->unique();
-            $table->string('nome');
-            $table->index('nome');
-            $table->string('sigla');
-            $table->string('url');
+            $table->string('nome')->nullable();
+            $table->string('sigla')->nullable();
+            $table->string('url')->nullable();
             $table->boolean('gpt_worked')->default(false);
             $table->longText('descricao')->nullable();
             $table->date('next_run')->nullable();

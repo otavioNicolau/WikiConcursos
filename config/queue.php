@@ -42,6 +42,95 @@ return [
             'after_commit' => false,
         ],
 
+        'areas' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'areas',
+            'retry_after' => 90,
+            'after_commit' => false,
+        ],
+
+        'assuntos' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'assuntos',
+            'retry_after' => 90,
+            'after_commit' => false,
+        ],
+
+        'bancas' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'bancas',
+            'retry_after' => 90,
+            'after_commit' => false,
+        ],
+
+        'cargos' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'cargos',
+            'retry_after' => 90,
+            'after_commit' => false,
+        ],
+
+        'comentarios' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+            'queue' => 'comentarios',
+            'retry_after' => 120,
+            'block_for' => null,
+        ],
+        'editais' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'editais',
+            'retry_after' => 60,
+            'after_commit' => false,
+        ],
+        'escolaridades' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+            'queue' => 'escolaridades',
+            'retry_after' => 180,
+            'block_for' => null,
+        ],
+        'materias' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'materias',
+            'retry_after' => 120,
+            'after_commit' => false,
+        ],
+        'orgaos' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+            'queue' => 'orgaos',
+            'retry_after' => 90,
+            'block_for' => null,
+        ],
+        'profissoes' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'profissoes',
+            'retry_after' => 60,
+            'after_commit' => false,
+        ],
+        'questoes' => [
+            'driver' => 'redis',
+            'connection' => 'default',
+            'queue' => 'questoes',
+            'retry_after' => 120,
+            'block_for' => null,
+        ],
+        'provas' => [
+            'driver' => 'database',
+            'table' => 'jobs',
+            'queue' => 'provas',
+            'retry_after' => 90,
+            'after_commit' => false,
+        ],
+    
         'beanstalkd' => [
             'driver' => 'beanstalkd',
             'host' => 'localhost',

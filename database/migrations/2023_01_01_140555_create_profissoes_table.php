@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('profissoes', function (Blueprint $table) {
             $table->id();
             $table->unsignedInteger('ext_id')->unique();
-            $table->string('nome');
+            $table->string('nome')->nullable();
             $table->longText('descricao')->nullable();
             $table->boolean('gpt_worked')->default(false);
             $table->date('next_run')->nullable();

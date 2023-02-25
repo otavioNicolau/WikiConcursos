@@ -38,8 +38,8 @@ class Profissao extends Command
 
     public function handle()
     {
-        $this->dispatch(
-            new Profissoes("https://www.tecconcursos.com.br/api/concursos/busca-avancada/profissoes")
-        );
+        $job = new Profissoes("https://www.tecconcursos.com.br/api/concursos/busca-avancada/profissoes");
+        $job->onQueue('profissoes');
+        $this->dispatch($job);
     }
 }

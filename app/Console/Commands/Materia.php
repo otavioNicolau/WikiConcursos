@@ -9,6 +9,13 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 class Materia extends Command
 {
     /**
+     * Execute the console command.
+     *
+     * @return int
+     */
+
+    use DispatchesJobs;
+    /**
      * The name and signature of the console command.
      *
      * @var string
@@ -22,14 +29,6 @@ class Materia extends Command
      */
     protected $description = 'Realizar a coleta das informações referente as materias no tec.';
 
-    /**
-     * Execute the console command.
-     *
-     * @return int
-     */
-
-    use DispatchesJobs;
-
 
     public function __construct()
     {
@@ -38,12 +37,11 @@ class Materia extends Command
 
     public function handle()
     {
-
-        $this->dispatch(
-            new Materias(
-                "https://www.tecconcursos.com.br/api/materias/busca-rapida",
-                1
-            )
+        $job = new Materias(
+            "https://www.tecconcursos.com.br/api/materias/busca-rapida",
+            1
         );
+        $job->onQueue('materias');
+        $this->dispatch($job);
     }
 }

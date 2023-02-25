@@ -57,7 +57,10 @@ class Materias implements ShouldQueue
 
             if ($this->num == 1) {
                 for ($i = 2; $i <= $totalPages; $i++) {
-                    dispatch(new Materias($this->url, $i));
+                    $job = new Materias($this->url, $i);
+                    $job->onQueue('materias');
+                    dispatch($job);
+
                 }
             }
         } catch (\Exception $e) {
