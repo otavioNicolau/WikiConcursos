@@ -39,8 +39,7 @@ class Edital extends Command
     public function handle()
     {
         $job = new Editais("https://www.tecconcursos.com.br/api/concursos/buscas/rapida", 1);
-        $job->onQueue('editais');
-        $this->dispatch($job);
-  
+        //$job->onQueue('editais');
+        dispatch($job);
     }
 }

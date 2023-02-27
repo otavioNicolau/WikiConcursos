@@ -89,10 +89,12 @@ class Orgaos implements ShouldQueue
 
             if ($orgaoModel->wasRecentlyCreated || $orgaoModel->next_run < Carbon::now()->toDateString()) {
                 if (!empty($orgao['uuidLogo'])) {
-                    $this->downloadFile(
+                    $job = new Downloads(
                         "https://s3-sa-east-1.amazonaws.com/figuras.tecconcursos.com.br/" . $orgao['uuidLogo'],
                         "orgaos"
                     );
+                    $job->onQueue('downloads');
+                    dispatch($job);
                 }
 
                 $orgaoModel->nome = $orgao['nome'];

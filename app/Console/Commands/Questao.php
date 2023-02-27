@@ -82,11 +82,8 @@ class Questao extends Command
                 $data,
                 $headers
             );
-            $job->onQueue('areas');
+            $job->onQueue('questoes');
             $this->dispatch($job);
-
-            $questao->next_run = Carbon::now()->addDays(5);
-            $questao->save();
         }
     }
 }

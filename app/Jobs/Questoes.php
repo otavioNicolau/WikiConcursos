@@ -6,12 +6,14 @@ use App\Models\Alternativa;
 use App\Models\Concurso;
 use App\Models\ProvaQuestao;
 use App\Models\Questao;
+use Carbon\Carbon;
 use DateTime;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
 
@@ -52,6 +54,7 @@ class Questoes implements ShouldQueue
                 $this->updateOrCreateQuestao($questao);
                 $this->updateOrCreateProvaQuestao($questao);
                 $this->updateOrCreateConcurso($questao);
+
                 $i = 0;
                 foreach ($questao['alternativas'] as $alternativa) {
                     $this->updateOrCreateAlternativa($alternativa, $questao['idQuestao'], $i);
@@ -81,25 +84,29 @@ class Questoes implements ShouldQueue
                 ]
             );
 
-            if ($questaoModel->wasRecentlyCreated) {
-                $questaoModel->nome_assunto = isset($questao['nomeAssunto']) ? $questao['nomeAssunto'] : null;
-                $questaoModel->enunciado = $questao['enunciado'];
-                $questaoModel->correcao_questao = isset($questao['correcaoQuestao']) ? $questao['correcaoQuestao'] : null;
-                $questaoModel->numero_alternativa_correta = isset($questao['numeroAlternativaCorreta']) ? $questao['numeroAlternativaCorreta'] : null;
-                $questaoModel->possui_comentario = isset($questao['possuiComentario']) ? $questao['possuiComentario'] : null;
-                $questaoModel->anulada = isset($questao['anulada']) ? $questao['anulada'] : null;
-                $questaoModel->tipo_questao = isset($questao['tipoQuestao']) ? $questao['tipoQuestao'] : null;
-                $questaoModel->desatualizada = isset($questao['desatualizada']) ? $questao['desatualizada'] : null;
-                $questaoModel->formato_questao = isset($questao['formatoQuestao']) ? $questao['formatoQuestao'] : null;
-                $questaoModel->data_atual = $questao['dataAtual'];
-                $questaoModel->gabarito_preliminar = isset($questao['gabaritoPreliminar']) ? $questao['gabaritoPreliminar'] : null;
-                $questaoModel->desatualizada_com_gabarito_preliminar = isset($questao['desatualizadaComGabaritoPreliminar']) ? $questao['desatualizadaComGabaritoPreliminar'] : null;
-                $questaoModel->desatualizada_com_gabarito_definivo = isset($questao['desatualizadaComGabaritoDefinivo']) ? $questao['desatualizadaComGabaritoDefinivo'] : null;
-                $questaoModel->questao_oculta = isset($questao['questaoOculta']) ? $questao['questaoOculta'] : null;
-                $questaoModel->data_publicacao = $questao['dataPublicacao']['$'];
-                $questaoModel->save();
-                echo "QUESTÃO - {$questao['idQuestao']} Atualizada com Sucesso!" . PHP_EOL;
-            }
+            $enunciado1 = strip_tags($questao['enunciado'], '<img>');
+            $enunciado = html_entity_decode($enunciado1, ENT_QUOTES, 'UTF-8');
+
+            //  if ($questaoModel->wasRecentlyCreated) {
+            $questaoModel->nome_assunto = isset($questao['nomeAssunto']) ? $questao['nomeAssunto'] : null;
+            $questaoModel->enunciado = $enunciado;
+            $questaoModel->correcao_questao = isset($questao['correcaoQuestao']) ? $questao['correcaoQuestao'] : null;
+            $questaoModel->numero_alternativa_correta = isset($questao['numeroAlternativaCorreta']) ? $questao['numeroAlternativaCorreta'] : null;
+            $questaoModel->possui_comentario = isset($questao['possuiComentario']) ? $questao['possuiComentario'] : null;
+            $questaoModel->anulada = isset($questao['anulada']) ? $questao['anulada'] : null;
+            $questaoModel->tipo_questao = isset($questao['tipoQuestao']) ? $questao['tipoQuestao'] : null;
+            $questaoModel->desatualizada = isset($questao['desatualizada']) ? $questao['desatualizada'] : null;
+            $questaoModel->formato_questao = isset($questao['formatoQuestao']) ? $questao['formatoQuestao'] : null;
+            $questaoModel->data_atual = isset($questao['dataAtual']) ? $questao['dataAtual'] : null;
+            $questaoModel->gabarito_preliminar = isset($questao['gabaritoPreliminar']) ? $questao['gabaritoPreliminar'] : null;
+            $questaoModel->desatualizada_com_gabarito_preliminar = isset($questao['desatualizadaComGabaritoPreliminar']) ? $questao['desatualizadaComGabaritoPreliminar'] : null;
+            $questaoModel->desatualizada_com_gabarito_definivo = isset($questao['desatualizadaComGabaritoDefinivo']) ? $questao['desatualizadaComGabaritoDefinivo'] : null;
+            $questaoModel->questao_oculta = isset($questao['questaoOculta']) ? $questao['questaoOculta'] : null;
+            $questaoModel->data_publicacao = isset($questao['dataPublicacao']['$']) ? $questao['dataPublicacao']['$'] : null;
+            $questaoModel->next_run = Carbon::now()->addDays(5);
+            $questaoModel->save();
+            echo "QUESTÃO - {$questao['idQuestao']} Atualizada com Sucesso!" . PHP_EOL;
+            // }
         } catch (\Exception $e) {
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;
@@ -137,16 +144,20 @@ class Questoes implements ShouldQueue
                 ],
             );
 
-            if ($alternativaModel->wasRecentlyCreated) {
-                $alternativaModel->alternativa = $alternativa;
-                $alternativaModel->save();
-                echo "Alternativa - {$alternativa} Atualizada com Sucesso!" . PHP_EOL;
-            }
+            //if ($alternativaModel->wasRecentlyCreated) {
+            $alternativa_sem_tags = strip_tags($alternativa);
+            $alternativa_decoded = html_entity_decode($alternativa_sem_tags, ENT_QUOTES, 'UTF-8');
+            $alternativaModel->alternativa = $alternativa_decoded;
+            $alternativaModel->save();
+            echo "Alternativa - {$alternativa_decoded} Atualizada com Sucesso!" . PHP_EOL;
+            // }
         } catch (\Exception $e) {
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;
         }
     }
+
+
 
     protected function updateOrCreateConcurso($questao)
     {
@@ -155,11 +166,10 @@ class Questoes implements ShouldQueue
                 ['ext_id' => $questao['concursoId']],
             );
 
-            $concursoModel->area = $questao['concursoArea'];
-            $concursoModel->especialidade = $questao['concursoEspecialidade'];
+            $concursoModel->area = isset($questao['concursoArea']) ? $questao['concursoArea'] : null;
+            $concursoModel->especialidade = isset($questao['concursoEspecialidade']) ? $questao['concursoEspecialidade'] : null;
             $concursoModel->save();
             echo "CONCURSO - {$questao['concursoId']} Atualizado com Sucesso!" . PHP_EOL;
-         
         } catch (\Exception $e) {
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;

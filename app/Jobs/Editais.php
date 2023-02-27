@@ -72,7 +72,7 @@ class Editais implements ShouldQueue
             if ($this->num == 1) {
                 for ($i = 2; $i <= $totalPages; $i++) {
                     $job = new Editais($this->url, $i);
-                    $job->onQueue('editais');
+                    //$job->onQueue('editais');
                     dispatch($job);
                 }
             }
@@ -147,31 +147,39 @@ class Editais implements ShouldQueue
 
             if ($concursoModel->wasRecentlyCreated || $concursoModel->next_run < Carbon::now()->toDateString()) {
                 if (!empty($concurso['arquivoGabarito'])) {
-                    $this->downloadFile(
+                    $job = new Downloads(
                         "https://www.tecconcursos.com.br/download/" . $concurso['arquivoGabarito'],
                         "gabaritos"
                     );
+                    $job->onQueue('downloads');
+                    dispatch($job);
                 }
 
                 if (!empty($concurso['arquivoDiscursiva'])) {
-                    $this->downloadFile(
+                    $job = new Downloads(
                         "https://www.tecconcursos.com.br/download/" . $concurso['arquivoDiscursiva'],
                         "discursivas"
                     );
+                    $job->onQueue('downloads');
+                    dispatch($job);
                 }
 
                 if (!empty($concurso['arquivoObjetiva'])) {
-                    $this->downloadFile(
+                    $job = new Downloads(
                         "https://www.tecconcursos.com.br/download/" . $concurso['arquivoObjetiva'],
                         "objetivas"
                     );
+                    $job->onQueue('downloads');
+                    dispatch($job);
                 }
 
                 if (!empty($concurso['arquivoEdital'])) {
-                    $this->downloadFile(
+                    $job = new Downloads(
                         "https://www.tecconcursos.com.br/download/" . $concurso['arquivoEdital'],
                         "editais"
                     );
+                    $job->onQueue('downloads');
+                    dispatch($job);
                 }
 
                 $concursoModel->data_aplicacao = $data_aplicacao;

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedInteger('ext_id')->unique();
             $table->unsignedInteger('id_materia')->nullable();
-            $table->unsignedInteger('nome_assunto')->nullable();
+            $table->text('nome_assunto')->nullable();
             $table->text('enunciado')->nullable();
             $table->boolean('correcao_questao')->nullable();
             $table->integer('numero_alternativa_correta')->nullable();
