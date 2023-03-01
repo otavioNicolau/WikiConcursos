@@ -36,7 +36,7 @@ class Bancas implements ShouldQueue
                 'query' => [
                     'formato' => 'OBJETIVA',
                     'universo' => ''
-                ]
+                ],'headers' => getDefaultHeaders()
             ]);
 
             $statusCode = $response->getStatusCode();
@@ -49,6 +49,7 @@ class Bancas implements ShouldQueue
                     $this->updateOrCreateBanca($banca);
                 }
             }
+            sleep(getDelay());
         } catch (\Exception $e) {
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;

@@ -45,7 +45,7 @@ class Editais implements ShouldQueue
             $response = $client->get($this->url, [
                 'query' => [
                     'busca.pagina' => $this->num
-                ]
+                ],'headers' => getDefaultHeaders()
             ]);
 
             $statusCode = $response->getStatusCode();
@@ -76,6 +76,8 @@ class Editais implements ShouldQueue
                     dispatch($job);
                 }
             }
+
+            sleep(getDelayEditais());
         } catch (\Exception $e) {
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;

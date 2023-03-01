@@ -45,6 +45,8 @@ class Prova extends Command
         })->get();
 
         foreach ($concuros as $concuro) {
+            echo "JOB Provas - Inserido com Sucesso!" . PHP_EOL;
+
             $job = new Provas(
                 "https://www.tecconcursos.com.br/api/concursos/questoes/{$concuro->ext_id}/provas",
                 $concuro->ext_id

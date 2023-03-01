@@ -42,8 +42,11 @@ class Questoes implements ShouldQueue
     {
         try {
             $client = new Client();
-            $response = $client->post($this->url, ['headers' => $this->headers, 'form_params' => $this->data]);
-
+            $response = $client->get(
+                $this->url,
+                ['headers' => getDefaultHeaders()]
+            );
+            // $response = $client->post($this->url, ['headers' => $this->headers, 'form_params' => $this->data]);
             $statusCode = $response->getStatusCode();
 
             if ($statusCode == 200) {
@@ -61,6 +64,7 @@ class Questoes implements ShouldQueue
                     $i++;
                 }
             }
+            sleep(getDelayQuestoes());
         } catch (\Exception $e) {
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;
@@ -79,9 +83,6 @@ class Questoes implements ShouldQueue
         try {
             $questaoModel = Questao::firstOrCreate(
                 ['ext_id' => $questao['idQuestao']],
-                [
-                    'id_materia' => isset($questao['idMateria']) ? $questao['idMateria'] : null,
-                ]
             );
 
             $enunciado1 = strip_tags($questao['enunciado'], '<img>');
@@ -90,7 +91,8 @@ class Questoes implements ShouldQueue
             //  if ($questaoModel->wasRecentlyCreated) {
             $questaoModel->nome_assunto = isset($questao['nomeAssunto']) ? $questao['nomeAssunto'] : null;
             $questaoModel->enunciado = $enunciado;
-            $questaoModel->correcao_questao = isset($questao['correcaoQuestao']) ? $questao['correcaoQuestao'] : null;
+            $questaoModel->id_materia = isset($questao['idMateria']) ? $questao['idMateria'] : null;
+            //$questaoModel->correcao_questao = isset($questao['correcaoQuestao']) ? $questao['correcaoQuestao'] : null;
             $questaoModel->numero_alternativa_correta = isset($questao['numeroAlternativaCorreta']) ? $questao['numeroAlternativaCorreta'] : null;
             $questaoModel->possui_comentario = isset($questao['possuiComentario']) ? $questao['possuiComentario'] : null;
             $questaoModel->anulada = isset($questao['anulada']) ? $questao['anulada'] : null;

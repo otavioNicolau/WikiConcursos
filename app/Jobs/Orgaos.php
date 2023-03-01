@@ -51,7 +51,7 @@ class Orgaos implements ShouldQueue
                 'query' => [
                     'busca.ordenacao' => 'posicao',
                     'busca.pagina' => $this->num
-                ]
+                ],'headers' => getDefaultHeaders()
             ]);
 
             $statusCode = $response->getStatusCode();
@@ -74,6 +74,8 @@ class Orgaos implements ShouldQueue
                     dispatch($job);
                 }
             }
+
+            sleep(getDelayOrgaos());
         } catch (\Exception $e) {
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;

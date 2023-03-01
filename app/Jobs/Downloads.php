@@ -39,7 +39,10 @@ class Downloads implements ShouldQueue
     {
         try {
             $client = new Client();
-            $response = $client->get($this->file_url, []);
+            $response = $client->get(
+                $this->file_url,
+                ['headers' => getDefaultHeaders()]
+            );
 
             if ($response->getStatusCode() == 200) {
                 $fileContents = $response->getBody()->getContents();
@@ -49,9 +52,11 @@ class Downloads implements ShouldQueue
                 if (!Storage::disk('s3')->exists($this->path . "/" . $fileName) || Storage::disk('s3')->size($this->path . "/" . $fileName) !=  $fileLengthWeb[0]) {
                     Storage::disk('s3')->put($this->path . "/" . $fileName, $fileContents);
                     echo "Download - {$fileName} Realizado com Sucesso!" . PHP_EOL;
-
                 }
             }
+
+            sleep(getDelayDownload());
+            
         } catch (\Exception $e) {
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;

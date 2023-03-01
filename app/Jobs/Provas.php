@@ -42,7 +42,7 @@ class Provas implements ShouldQueue
             $response = $client->get($this->url, [
                 'query' => [
                     'tipo' => 'OBJETIVA',
-                ]
+                ],'headers' => getDefaultHeaders()
             ]);
 
             $statusCode = $response->getStatusCode();
@@ -62,6 +62,8 @@ class Provas implements ShouldQueue
                     }
                 }
             }
+
+            sleep(getDelayProvas());
         } catch (\Exception $e) {
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;
@@ -84,7 +86,7 @@ class Provas implements ShouldQueue
                     'prova_nome' => $prova_nome,
                     'concurso_id' => $concurso_id,
                     'numero_questao' => $questao['numeroQuestao'],
-                    'questao_id' => $questao['id'], 
+                    'questao_id' => $questao['id'],
                 ],
             );
 
@@ -112,7 +114,6 @@ class Provas implements ShouldQueue
             $provaModel->next_run  = Carbon::now()->addDays(5);
             $provaModel->save();
             echo "A prova - {$prova['nome']} Atualizada com Sucesso!" . PHP_EOL;
-
         } catch (\Exception $e) {
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;

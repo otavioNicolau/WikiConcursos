@@ -33,7 +33,7 @@ class Areas implements ShouldQueue
     {
         try {
             $client = new Client();
-            $response = $client->get($this->url, []);
+            $response = $client->get($this->url, ['headers' => getDefaultHeaders()]);
 
             $statusCode = $response->getStatusCode();
 
@@ -45,6 +45,7 @@ class Areas implements ShouldQueue
                     $this->updateOrCreateArea($area);
                 }
             }
+            sleep(getDelay());
         } catch (\Exception $e) {
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;

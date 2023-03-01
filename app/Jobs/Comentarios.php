@@ -41,7 +41,7 @@ class Comentarios implements ShouldQueue
         try {
             $client = new Client();
             $response = $client->get($this->url, [
-                'headers' => $this->headers,
+                'headers' => getDefaultHeaders(),
                 'query' => [
                     'tokenPreVisualizacao' => '',
                 ]
@@ -54,6 +54,8 @@ class Comentarios implements ShouldQueue
                 $comentario = $data['comentario'];
                 $this->updateOrCreateComentario($comentario, $this->id_questao);
             }
+            sleep(getDelayComentarios());
+            
         } catch (\Exception $e) {
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;

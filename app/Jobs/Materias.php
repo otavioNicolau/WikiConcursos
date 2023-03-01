@@ -39,7 +39,7 @@ class Materias implements ShouldQueue
                 'query' => [
                     'busca.ordenacao' => 'posicao',
                     'busca.pagina' => $this->num
-                ]
+                ],'headers' => getDefaultHeaders()
             ]);
 
             $statusCode = $response->getStatusCode();
@@ -63,6 +63,7 @@ class Materias implements ShouldQueue
 
                 }
             }
+            sleep(getDelay());
         } catch (\Exception $e) {
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;
