@@ -35,7 +35,7 @@ class Areas implements ShouldQueue
             $client = new Client();
             $response = $client->get($this->url, [
                 'headers' => getDefaultHeaders(),
-                'cache' => false
+                'cache' => false,
             ]);
 
             $statusCode = $response->getStatusCode();
