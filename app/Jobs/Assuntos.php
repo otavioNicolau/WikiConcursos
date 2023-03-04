@@ -41,7 +41,8 @@ class Assuntos implements ShouldQueue
                     'hierarquico' => false,
                     'materia' => $this->materiaID,
                     'universo' => ''
-                ],'headers' => getDefaultHeaders()
+                ],'headers' => getDefaultHeaders(),
+                'cache' => false
             ]);
 
             $statusCode = $response->getStatusCode();
@@ -55,7 +56,6 @@ class Assuntos implements ShouldQueue
                 }
             }
             sleep(getDelayAssuntos());
-
         } catch (\Exception $e) {
             echo $e->getMessage() . PHP_EOL;
         }

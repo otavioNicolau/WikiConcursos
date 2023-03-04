@@ -45,7 +45,8 @@ class Editais implements ShouldQueue
             $response = $client->get($this->url, [
                 'query' => [
                     'busca.pagina' => $this->num
-                ],'headers' => getDefaultHeaders()
+                ],'headers' => getDefaultHeaders(),
+                'cache' => false
             ]);
 
             $statusCode = $response->getStatusCode();

@@ -43,7 +43,8 @@ class Cargos implements ShouldQueue
                     'hierarquico' => true,
                     'orgao' => $this->orgao_id,
                     'universo' => ''
-                ],'headers' => getDefaultHeaders()
+                ],'headers' => getDefaultHeaders(),
+                'cache' => false
             ]);
 
             $statusCode = $response->getStatusCode();
@@ -64,7 +65,6 @@ class Cargos implements ShouldQueue
             }
 
             sleep(getDelayCargos());
-
         } catch (\Exception $e) {
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;

@@ -51,7 +51,9 @@ class Orgaos implements ShouldQueue
                 'query' => [
                     'busca.ordenacao' => 'posicao',
                     'busca.pagina' => $this->num
-                ],'headers' => getDefaultHeaders()
+                ],
+                'headers' => getDefaultHeaders(),
+                'cache' => false
             ]);
 
             $statusCode = $response->getStatusCode();

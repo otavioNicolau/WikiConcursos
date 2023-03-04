@@ -33,7 +33,12 @@ class Profissoes implements ShouldQueue
     {
         try {
             $client = new Client();
-            $response = $client->get($this->url, ['headers' => getDefaultHeaders()]);
+            $response = $client->get(
+                $this->url,
+                [
+                    'headers' => getDefaultHeaders(),
+                    'cache' => false
+                ]);
 
             $statusCode = $response->getStatusCode();
 

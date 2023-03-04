@@ -41,7 +41,10 @@ class Downloads implements ShouldQueue
             $client = new Client();
             $response = $client->get(
                 $this->file_url,
-                ['headers' => getDefaultHeaders()]
+                [
+                    'headers' => getDefaultHeaders(),
+                    'cache' => false
+                ]
             );
 
             if ($response->getStatusCode() == 200) {
@@ -56,7 +59,6 @@ class Downloads implements ShouldQueue
             }
 
             sleep(getDelayDownload());
-            
         } catch (\Exception $e) {
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;

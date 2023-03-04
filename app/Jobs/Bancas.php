@@ -36,7 +36,8 @@ class Bancas implements ShouldQueue
                 'query' => [
                     'formato' => 'OBJETIVA',
                     'universo' => ''
-                ],'headers' => getDefaultHeaders()
+                ],'headers' => getDefaultHeaders(),
+                'cache' => false
             ]);
 
             $statusCode = $response->getStatusCode();

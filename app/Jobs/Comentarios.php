@@ -42,6 +42,7 @@ class Comentarios implements ShouldQueue
             $client = new Client();
             $response = $client->get($this->url, [
                 'headers' => getDefaultHeaders(),
+                'cache' => false,
                 'query' => [
                     'tokenPreVisualizacao' => '',
                 ]

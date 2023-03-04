@@ -7,7 +7,6 @@ use App\Models\Concurso;
 use App\Models\ProvaQuestao;
 use App\Models\Questao;
 use Carbon\Carbon;
-use DateTime;
 use GuzzleHttp\Client;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -16,7 +15,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\RateLimited;
 use Illuminate\Queue\SerializesModels;
 use romanzipp\QueueMonitor\Traits\IsMonitored;
-
+use Illuminate\Support\Facades\Cache;
 class Questoes implements ShouldQueue
 {
     use Dispatchable;
@@ -41,10 +40,15 @@ class Questoes implements ShouldQueue
     public function handle()
     {
         try {
+            //Cache::flush();
+
             $client = new Client();
             $response = $client->get(
                 $this->url,
-                ['headers' => getDefaultHeaders()]
+                [
+                    'headers' => getDefaultHeaders(),
+                    'cache' => false
+                    ]
             );
             // $response = $client->post($this->url, ['headers' => $this->headers, 'form_params' => $this->data]);
             $statusCode = $response->getStatusCode();

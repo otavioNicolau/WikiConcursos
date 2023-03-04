@@ -42,7 +42,8 @@ class Provas implements ShouldQueue
             $response = $client->get($this->url, [
                 'query' => [
                     'tipo' => 'OBJETIVA',
-                ],'headers' => getDefaultHeaders()
+                ],'headers' => getDefaultHeaders(),
+                'cache' => false
             ]);
 
             $statusCode = $response->getStatusCode();
