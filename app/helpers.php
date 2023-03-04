@@ -2,7 +2,7 @@
 
 function getDefaultHeaders()
 {
-    $num = rand(1, 5);
+    $num = env('BOT');
 
     switch ($num) {
         case 1:
@@ -136,7 +136,8 @@ function getDelay()
 
 function getDelayQuestoes()
 {
-    return 15;
+    
+    return 07;
 }
 
 function getDelayProvas()
