@@ -2,69 +2,176 @@
 
 function getDefaultHeaders()
 {
-    return  [
-        'authority' => 'www.tecconcursos.com.br',
-        'path' => '/api/questoes/2248156',
-        'scheme' => 'https',
-        'accept' => 'application/json, text/plain, * / *',
-        'accept-encoding' => 'gzip, deflate, br',
-        'accept-language' => 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
-        'cache-control' => 'no-cache',
-        'cookie' => '_fbp=fb.2.1673711946824.1020756054; _gcl_au=1.1.984240383.1676984838; _gid=GA1.3.922652971.1677191667; JSESSIONID=F95E555BDBB6A789620C457D3245F43C; TecPermanecerLogado=ODcwNTMwLG90YXZpby5nYXR6QGdtYWlsLmNvbSwkMmEkMTIkQnZxbUI5LzVQMVlTZjBFL0c2UkxPLjNVRkQvazFOT0VSQUJqbDlvUzFKMkFmQUNBL0sxMDI=; _gat=1; _gat_UA-32462178-1=1; _ga=GA1.1.1154984221.1673711946; _ga_1LNYCM2MLB=GS1.1.1677625218.16.1.1677627539.16.0.0; AWSALB=N+9dCjBAaTKa2NXaf5KrcCJmODVqPBO9J135f5DMmcoYi/RoWSYoaMLLRZBGQhg5mwvzUDwWlbD3e7Pf7dkpRSp6nKhVbOjgK5W0nZPBS92shIqWBMVlqbwBIIRm; AWSALBCORS=N+9dCjBAaTKa2NXaf5KrcCJmODVqPBO9J135f5DMmcoYi/RoWSYoaMLLRZBGQhg5mwvzUDwWlbD3e7Pf7dkpRSp6nKhVbOjgK5W0nZPBS92shIqWBMVlqbwBIIRm',
-        'if-modified-since' => 'Mon, 26 Jul 1997 05:00:00 GMT',
-        'logado' => 'true',
-        'pragma' => 'no-cache',
-        'referer' => 'https://www.tecconcursos.com.br/questoes/busca',
-        'sec-ch-ua' => '"Chromium";v="110", "Not A(Brand";v="24", "Google Chrome";v="110"',
-        'sec-ch-ua-mobile' => '?0',
-        'sec-ch-ua-platform' => '"Windows"',
-        'sec-fetch-dest' => 'empty',
-        'sec-fetch-mode' => 'cors',
-        'sec-fetch-site' => 'same-origin',
-        'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'
-      ];
+    $num = rand(1, 5);
+
+    switch ($num) {
+        case 1:
+            //otavio.gatz
+            return  [
+                'authority' => 'www.tecconcursos.com.br',
+                'path' => '/api/questoes/2248156',
+                'scheme' => 'https',
+                'accept' => 'application/json, text/plain, * / *',
+                'accept-encoding' => 'gzip, deflate, br',
+                'accept-language' => 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+                'cache-control' => 'no-cache',
+                'cookie' => '_fbp=fb.2.1673711946824.1020756054; _gcl_au=1.1.984240383.1676984838; _gid=GA1.3.922652971.1677191667; JSESSIONID=F95E555BDBB6A789620C457D3245F43C; TecPermanecerLogado=ODcwNTMwLG90YXZpby5nYXR6QGdtYWlsLmNvbSwkMmEkMTIkQnZxbUI5LzVQMVlTZjBFL0c2UkxPLjNVRkQvazFOT0VSQUJqbDlvUzFKMkFmQUNBL0sxMDI=; _gat=1; _gat_UA-32462178-1=1; _ga=GA1.1.1154984221.1673711946; _ga_1LNYCM2MLB=GS1.1.1677625218.16.1.1677627539.16.0.0; AWSALB=N+9dCjBAaTKa2NXaf5KrcCJmODVqPBO9J135f5DMmcoYi/RoWSYoaMLLRZBGQhg5mwvzUDwWlbD3e7Pf7dkpRSp6nKhVbOjgK5W0nZPBS92shIqWBMVlqbwBIIRm; AWSALBCORS=N+9dCjBAaTKa2NXaf5KrcCJmODVqPBO9J135f5DMmcoYi/RoWSYoaMLLRZBGQhg5mwvzUDwWlbD3e7Pf7dkpRSp6nKhVbOjgK5W0nZPBS92shIqWBMVlqbwBIIRm',
+                'if-modified-since' => 'Mon, 26 Jul 1997 05:00:00 GMT',
+                'logado' => 'true',
+                'pragma' => 'no-cache',
+                'referer' => 'https://www.tecconcursos.com.br/questoes/busca',
+                'sec-ch-ua' => '"Chromium";v="110", "Not A(Brand";v="24", "Google Chrome";v="110"',
+                'sec-ch-ua-mobile' => '?0',
+                'sec-ch-ua-platform' => '"Windows"',
+                'sec-fetch-dest' => 'empty',
+                'sec-fetch-mode' => 'cors',
+                'sec-fetch-site' => 'same-origin',
+                'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'
+                ];
+        case 2:
+            //otavio.nicolllau
+            return  [
+                'authority' => 'www.tecconcursos.com.br',
+                'method' => 'GET',
+                'path' => '/api/questoes/2071649',
+                'scheme' => 'https',
+                'accept' => 'application/json, text/plain, * / *',
+                'accept-encoding' => 'gzip, deflate, br',
+                'accept-language' => 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+                'cache-control' => 'no-cache',
+                'cookie' => '_fbp=fb.2.1673711946824.1020756054; _gcl_au=1.1.984240383.1676984838; _gid=GA1.3.922652971.1677191667; JSESSIONID=DFC718E046251C0A4DB8F9D8AE34C31B; TecPermanecerLogado="MzI3MjA2NixvdGF2aW8ubmljb2xsbGF1QGdtYWlsLmNvbSwkMmEkMTIkMzJlUXFDdHdZYVQ4Wjc0b2N4OFcwLnU2c3BzcjhGL1pORWVocHhsZTBRUW5RLzlQMWFaaUs="; _ga=GA1.1.1154984221.1673711946; _ga_1LNYCM2MLB=GS1.1.1677800577.21.1.1677800636.1.0.0; _gali=questoes-busca; AWSALB=Aurk3UXlJk2jQL1/maCFil+ZOVL+fV8fGvPjbtEba2zL1lA2LKzZfMUWnwJAGaOMhjgnKv+LTY9Y2Pajubpqr3LPhsrMsN6IVn8h8Kq7BD6zWNnQiIARRUWJhXE6; AWSALBCORS=Aurk3UXlJk2jQL1/maCFil+ZOVL+fV8fGvPjbtEba2zL1lA2LKzZfMUWnwJAGaOMhjgnKv+LTY9Y2Pajubpqr3LPhsrMsN6IVn8h8Kq7BD6zWNnQiIARRUWJhXE6',
+                'if-modified-since' => 'Mon, 26 Jul 1997 05:00:00 GMT',
+                'logado' => 'true',
+                'pragma' => 'no-cache',
+                'referer' => 'https://www.tecconcursos.com.br/questoes/busca',
+                'sec-ch-ua' => '"Chromium";v="110", "Not A(Brand";v="24", "Google Chrome";v="110"',
+                'sec-ch-ua-mobile' => '?0',
+                'sec-ch-ua-platform' => '"Windows"',
+                'sec-fetch-dest' => 'empty',
+                'sec-fetch-mode' => 'cors',
+                'sec-fetch-site' => 'same-origin',
+                'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'
+              ];
+
+        case 3:
+            //laura.nicolllau
+            return [
+                'authority' => 'www.tecconcursos.com.br',
+                'method' => 'POST',
+                'path' => '/api/questoes',
+                'scheme' => 'https',
+                'accept' => 'application/json, text/plain, * / *',
+                'accept-encoding' => 'gzip, deflate, br',
+                'accept-language' => 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+                'cache-control' => 'no-cache',
+                'content-type' => 'application/x-www-form-urlencoded; charset=UTF-8',
+                'cookie' => '_fbp=fb.2.1673711946824.1020756054; _gcl_au=1.1.984240383.1676984838; _gid=GA1.3.1485840514.1677889487; JSESSIONID=95747104ECE87B3501DCD540C8C02853; _gat=1; _gat_UA-32462178-1=1; _ga_1LNYCM2MLB=GS1.1.1677889488.22.1.1677889973.41.0.0; _ga=GA1.3.1154984221.1673711946; _gali=questoes-busca; AWSALB=aYBwutRuuPCeedTOU4jyND+KjnPklU/E5PIo0KeMVT1RfcJkYC5xjY7+8dzYpOXEbl9PK13+hFMqI029D5XA3HGOtnhwom9UzrUa36TwQDmw3YkRupz4jbdPS1zv; AWSALBCORS=aYBwutRuuPCeedTOU4jyND+KjnPklU/E5PIo0KeMVT1RfcJkYC5xjY7+8dzYpOXEbl9PK13+hFMqI029D5XA3HGOtnhwom9UzrUa36TwQDmw3YkRupz4jbdPS1zv',
+                'if-modified-since' => 'Mon, 26 Jul 1997 05:00:00 GMT',
+                'logado' => 'true',
+                'origin' => 'https://www.tecconcursos.com.br',
+                'pragma' => 'no-cache',
+                'referer' => 'https://www.tecconcursos.com.br/questoes/busca',
+                'sec-ch-ua' => '"Chromium";v="110", "Not A(Brand";v="24", "Google Chrome";v="110"',
+                'sec-ch-ua-mobile' => '?0',
+                'sec-ch-ua-platform' => '"Windows"',
+                'sec-fetch-dest' => 'empty',
+                'sec-fetch-mode' => 'cors',
+                'sec-fetch-site' => 'same-origin',
+                'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'
+            ];
+        case 4:
+            //alice.nicolllau@gmail.com
+            return [
+                'authority' => 'www.tecconcursos.com.br',
+                'method' => 'POST',
+                'path' => '/api/questoes',
+                'scheme' => 'https',
+                'accept' => 'application/json, text/plain, * / *',
+                'accept-encoding' => 'gzip, deflate, br',
+                'accept-language' => 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+                'cache-control' => 'no-cache',
+                'content-type' => 'application/x-www-form-urlencoded; charset=UTF-8',
+                'cookie' => '_fbp=fb.2.1673711946824.1020756054; _gcl_au=1.1.984240383.1676984838; _gid=GA1.3.1485840514.1677889487; JSESSIONID=B6BB39FADB7AC5BF3A42E7A2157B1F78; _gat=1; _gat_UA-32462178-1=1; _ga_1LNYCM2MLB=GS1.1.1677889488.22.1.1677890487.52.0.0; _ga=GA1.3.1154984221.1673711946; _gali=questoes-busca; AWSALB=9+rSlktlnyoBGTFKBT+78YFJvhi2f7vdg3k0trKOeLEqv7fmMqdRd0phRHR33OcArioiydSzr1C6cxdlaUH+NIiTV3k6GSh+SN6y0G3vXUTCwPa0WuQUsc2Hm3an; AWSALBCORS=9+rSlktlnyoBGTFKBT+78YFJvhi2f7vdg3k0trKOeLEqv7fmMqdRd0phRHR33OcArioiydSzr1C6cxdlaUH+NIiTV3k6GSh+SN6y0G3vXUTCwPa0WuQUsc2Hm3an',
+                'if-modified-since' => 'Mon, 26 Jul 1997 05:00:00 GMT',
+                'logado' => 'true',
+                'origin' => 'https://www.tecconcursos.com.br',
+                'pragma' => 'no-cache',
+                'referer' => 'https://www.tecconcursos.com.br/questoes/busca',
+                'sec-ch-ua' => '"Chromium";v="110", "Not A(Brand";v="24", "Google Chrome";v="110"',
+                'sec-ch-ua-mobile' => '?0',
+                'sec-ch-ua-platform' => '"Windows"',
+                'sec-fetch-dest' => 'empty',
+                'sec-fetch-mode' => 'cors',
+                'sec-fetch-site' => 'same-origin',
+                'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'
+            ];
+        case 5:
+            //rafael.nicolllau
+            return [
+              'authority' => 'www.tecconcursos.com.br',
+              'method' => 'GET',
+              'path' => '/api/questoes/2071649',
+              'scheme' => 'https',
+              'accept' => 'application/json, text/plain, * / *',
+              'accept-encoding' => 'gzip, deflate, br',
+              'accept-language' => 'pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7',
+              'cache-control' => 'no-cache',
+              'cookie' => '_fbp=fb.2.1673711946824.1020756054; _gcl_au=1.1.984240383.1676984838; _gid=GA1.3.1485840514.1677889487; JSESSIONID=14B407067CB86A9AC31D1DDE5E23E565; TecPermanecerLogado=MzI3MzE2NSxyYWZhZWwubmljb2xsbGF1QGdtYWlsLmNvbSwkMmEkMTIkd3NBY0N5U0NRUzMwdUtEUUpNOXpCT0J6TnB0SVN3bC90VUdzOXZ1bzBLd2VBbmYxYWRMUEs=; _gat=1; _ga=GA1.3.1154984221.1673711946; _gat_UA-32462178-1=1; _ga_1LNYCM2MLB=GS1.1.1677889488.22.1.1677889629.58.0.0; _gali=questoes-busca; AWSALB=M+VwFR/PFsp90ATk/3cu5f3vear3lgm6cgwhFonbD7rgmrwR08+h+/5WI/eeXTGfgDCzJJUMQLbAFbU1W8/W1Rvv7zZvcAx/5CzK/oM+Ar5Xk9jNifKFMY1O0i1g; AWSALBCORS=M+VwFR/PFsp90ATk/3cu5f3vear3lgm6cgwhFonbD7rgmrwR08+h+/5WI/eeXTGfgDCzJJUMQLbAFbU1W8/W1Rvv7zZvcAx/5CzK/oM+Ar5Xk9jNifKFMY1O0i1g',
+              'if-modified-since' => 'Mon, 26 Jul 1997 05:00:00 GMT',
+              'logado' => 'true',
+              'pragma' => 'no-cache',
+              'referer' => 'https://www.tecconcursos.com.br/questoes/busca',
+              'sec-ch-ua' => '"Chromium";v="110", "Not A(Brand";v="24", "Google Chrome";v="110"',
+              'sec-ch-ua-mobile' => '?0',
+              'sec-ch-ua-platform' => '"Windows"',
+              'sec-fetch-dest' => 'empty',
+              'sec-fetch-mode' => 'cors',
+              'sec-fetch-site' => 'same-origin',
+              'user-agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36'
+            ];
+    }
 }
 
 
 function getDelay()
 {
-    return 5;
+    return 05;
 }
 
 function getDelayQuestoes()
 {
-    return 10;
+    return 06;
 }
 
 function getDelayProvas()
 {
-    return  10;
+    return  06;
 }
 
 function getDelayComentarios()
 {
-    return  10;
+    return  06;
 }
 function getDelayCargos()
 {
-    return  10;
+    return  06;
 }
 
 function getDelayEditais()
 {
-    return  10;
+    return  06;
 }
 
 function getDelayDownload()
 {
-    return  10;
+    return  06;
 }
 function getDelayAssuntos()
 {
-    return  10;
+    return 06;
 }
 
 function getDelayOrgaos()
 {
-    return  10;
+    return  06;
 }
