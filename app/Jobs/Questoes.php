@@ -66,6 +66,7 @@ class Questoes implements ShouldQueue
             }
             sleep(getDelayQuestoes());
         } catch (\Exception $e) {
+        
             $this->job->fail($e);
             echo $e->getMessage() . PHP_EOL;
         }
@@ -147,7 +148,7 @@ class Questoes implements ShouldQueue
             );
 
             //if ($alternativaModel->wasRecentlyCreated) {
-            $alternativa_sem_tags = strip_tags($alternativa);
+            $alternativa_sem_tags = strip_tags($alternativa, '<img>');
             $alternativa_decoded = html_entity_decode($alternativa_sem_tags, ENT_QUOTES, 'UTF-8');
             $alternativaModel->alternativa = $alternativa_decoded;
             $alternativaModel->save();
