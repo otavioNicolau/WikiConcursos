@@ -137,38 +137,38 @@ function getDelay()
 function getDelayQuestoes()
 {
     
-    return 8;
+    return 9;
 }
 
 function getDelayProvas()
 {
-    return 8;
+    return 9;
 }
 
 function getDelayComentarios()
 {
-    return 8;
+    return 9;
 }
 function getDelayCargos()
 {
-    return 8;
+    return 9;
 }
 
 function getDelayEditais()
 {
-    return 8;
+    return 9;
 }
 
 function getDelayDownload()
 {
-    return 8;
+    return 12;
 }
 function getDelayAssuntos()
 {
-    return 8;
+    return 9;
 }
 
 function getDelayOrgaos()
 {
-    return 8;
+    return 9;
 }
