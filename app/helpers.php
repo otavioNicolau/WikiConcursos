@@ -2,7 +2,7 @@
 
 function getDefaultHeaders()
 {
-    //AJUSTEs
+    //AJUSTEx
     $num = env('BOT');
 
     switch ($num) {
