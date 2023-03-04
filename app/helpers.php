@@ -136,7 +136,7 @@ function getDelay()
 
 function getDelayQuestoes()
 {
-    return 10;
+    return 15;
 }
 
 function getDelayProvas()

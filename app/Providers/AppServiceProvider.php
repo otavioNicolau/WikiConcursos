@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
         FacadesRateLimiter::for('questoes', fn()=> Limit::perMinute(15));
         FacadesRateLimiter::for('editais', fn()=> Limit::perMinute(15));
         FacadesRateLimiter::for('comentario', fn()=> Limit::perMinute(15));
-        FacadesRateLimiter::for('downloads', fn()=> Limit::perMinute(15));
+        FacadesRateLimiter::for('downloads', fn()=> Limit::perMinute(20));
 
         FacadesRateLimiter::for('assuntosGPT', fn()=> Limit::perMinute(10));
         FacadesRateLimiter::for('escolaridadesGPT', fn()=> Limit::perMinute(10));
