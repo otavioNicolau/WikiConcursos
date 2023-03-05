@@ -67,6 +67,7 @@ class Questoes implements ShouldQueue, ShouldBeUniqueUntilProcessing
                 foreach ($questao['alternativas'] as $alternativa) {
                     $this->updateOrCreateAlternativa($alternativa, $questao['idQuestao'], $i);
                     $i++;
+                    sleep(getDelayAlternatias()); 
                 }
             }
             sleep(getDelayQuestoes());

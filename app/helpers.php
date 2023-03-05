@@ -136,40 +136,45 @@ function getDelay()
     return 05;
 }
 
+function getDelayAlternatias()
+{
+    return 2;
+}
+
 function getDelayQuestoes()
 {
-    return 9;
+    return 6;
 }
 
 function getDelayProvas()
 {
-    return 9;
+    return 6;
 }
 
 function getDelayComentarios()
 {
-    return 9;
+    return 6;
 }
 function getDelayCargos()
 {
-    return 9;
+    return 6;
 }
 
 function getDelayEditais()
 {
-    return 9;
+    return 6;
 }
 
 function getDelayDownload()
 {
-    return 12;
+    return 6;
 }
 function getDelayAssuntos()
 {
-    return 9;
+    return 6;
 }
 
 function getDelayOrgaos()
 {
-    return 9;
+    return 6;
 }
