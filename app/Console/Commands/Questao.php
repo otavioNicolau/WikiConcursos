@@ -47,7 +47,8 @@ class Questao extends Command
         $questoes = QuestaoModel::where(function ($query) {
             $query->whereDate('next_run', '<', Carbon::now()->toDateString())
                   ->orWhereNull('next_run');
-        })->get();
+        })->limit(30000)->get();
+
 
         foreach ($questoes as $questao) {
             echo "JOB QUESTÃO - Inserido com Sucesso!" . PHP_EOL;

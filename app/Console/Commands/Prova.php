@@ -42,7 +42,7 @@ class Prova extends Command
         $concuros = Concurso::where(function ($query) {
             $query->whereDate('next_provas_run', '<', Carbon::now()->toDateString())
                   ->orWhereNull('next_provas_run');
-        })->get();
+        })->limit(30000)->get();
 
         foreach ($concuros as $concuro) {
             echo "JOB Provas - Inserido com Sucesso!" . PHP_EOL;

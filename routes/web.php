@@ -25,6 +25,7 @@ use GuzzleHttp\Client;
 
 
 Route::get('/q', function () {
+
     $url = "https://www.tecconcursos.com.br/api/questoes/15468";
     $headers = [
         'authority' => 'www.tecconcursos.com.br',
@@ -151,7 +152,6 @@ Route::get('/questao', function () {
         Legítima defesa
         Art. 25 - Entende-se em legítima defesa quem, usando moderadamente dos meios necessários, repele injusta agressão, atual ou iminente, a direito seu ou de outrem.
         )
-
         ',
     ]);
 
@@ -181,11 +181,13 @@ Route::get('/termos', function () {
 });
 
 Route::get('/l', function () {
-    $endPoint = "http://localhost/mediawiki/api.php";
+
+    $endPoint = "https://wikidosconcursos.com.br/api.php";
     $login_Token = getLoginToken($endPoint); // Step 1
     loginRequest($login_Token); // Step 2
     $csrf_Token = getCSRFToken($endPoint); // Step 3
     editRequest($csrf_Token, $endPoint); // Step 4
+
 });
 
 Route::prefix('/jobs')->group(function () {
@@ -221,7 +223,7 @@ function loginRequest($logintoken)
 
     $params2 = [
         "action" => "login",
-        "lgname" => "Otavio.gatz",
+        "lgname" => "otavio.nicollau",
         "lgpassword" => "442800442800",
         "lgtoken" => $logintoken,
         "format" => "json"
@@ -271,7 +273,7 @@ function editRequest($csrftoken, $endPoint)
 {
     $params4 = [
         "action" => "edit",
-        "title" => "Questão10",
+        "title" => "Questão teste1",
         "appendtext" => "{{Questão
 | pergunta        = 1Qual é a capital do Brasil?
 | resposta        = 1Brasília

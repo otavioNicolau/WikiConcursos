@@ -67,10 +67,11 @@ class Comentario extends Command
         $questoes = Questao::where(function ($query) {
             $query->whereDate('next_comentario_run', '<', Carbon::now()->toDateString())
                   ->orWhereNull('next_comentario_run');
-        })->get();
+        })->limit(30000)->get();
 
 
         foreach ($questoes as $questao) {
+            echo "JOB COMENTARIO - Inserido com Sucesso!" . PHP_EOL;
 
             $job =  new Comentarios(
                 "https://www.tecconcursos.com.br/api/questoes/{$questao->ext_id}/comentario",

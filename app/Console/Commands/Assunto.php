@@ -44,9 +44,11 @@ class Assunto extends Command
         $materias = Materia::where(function ($query) {
             $query->whereDate('next_assuntos_run', '<', Carbon::now()->toDateString())
                   ->orWhereNull('next_assuntos_run');
-        })->get();
+        })->limit(30000)->get();
 
         foreach ($materias as $materia) {
+            echo "JOB ASSUNTO - Inserido com Sucesso!" . PHP_EOL;
+
             $job = new Assuntos(
                 "https://www.tecconcursos.com.br/api/assuntos",
                 $materia->ext_id
