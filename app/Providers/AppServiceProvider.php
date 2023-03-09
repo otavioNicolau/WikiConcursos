@@ -27,13 +27,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        FacadesRateLimiter::for('prova', fn()=> Limit::perMinute(30));
-        FacadesRateLimiter::for('cargos', fn()=> Limit::perMinute(30));
-        FacadesRateLimiter::for('orgaos', fn()=> Limit::perMinute(30));
-        FacadesRateLimiter::for('questoes', fn()=> Limit::perMinute(30));
-        FacadesRateLimiter::for('editais', fn()=> Limit::perMinute(30));
-        FacadesRateLimiter::for('comentario', fn()=> Limit::perMinute(30));
-        FacadesRateLimiter::for('downloads', fn()=> Limit::perMinute(30));
+        FacadesRateLimiter::for('prova', fn()=> Limit::perMinute(100));
+        FacadesRateLimiter::for('cargos', fn()=> Limit::perMinute(100));
+        FacadesRateLimiter::for('orgaos', fn()=> Limit::perMinute(100));
+        FacadesRateLimiter::for('questoes', fn()=> Limit::perMinute(100));
+        FacadesRateLimiter::for('editais', fn()=> Limit::perMinute(100));
+        FacadesRateLimiter::for('comentario', fn()=> Limit::perMinute(100));
+        FacadesRateLimiter::for('downloads', fn()=> Limit::perMinute(100));
 
         FacadesRateLimiter::for('assuntosGPT', fn()=> Limit::perMinute(10));
         FacadesRateLimiter::for('escolaridadesGPT', fn()=> Limit::perMinute(10));

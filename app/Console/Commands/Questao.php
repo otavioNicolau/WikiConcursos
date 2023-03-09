@@ -47,7 +47,7 @@ class Questao extends Command
         $questoes = QuestaoModel::where(function ($query) {
             $query->whereDate('next_run', '<', Carbon::now()->toDateString())
                   ->orWhereNull('next_run');
-        })->limit(30000)->get();
+        })->limit(100000)->get();
 
 
         foreach ($questoes as $questao) {
