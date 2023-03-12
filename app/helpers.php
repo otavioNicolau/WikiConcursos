@@ -133,7 +133,7 @@ function getDefaultHeaders()
 
 function getDelay()
 {
-    return 3;
+    return 1;
 }
 
 function getDelayAlternatias()
@@ -143,38 +143,38 @@ function getDelayAlternatias()
 
 function getDelayQuestoes()
 {
-    return 5;
+    return 2;
 }
 
 function getDelayProvas()
 {
-    return 5;
+    return 2;
 }
 
 function getDelayComentarios()
 {
-    return 5;
+    return 2;
 }
 function getDelayCargos()
 {
-    return 5;
+    return 2;
 }
 
 function getDelayEditais()
 {
-    return 5;
+    return 2;
 }
 
 function getDelayDownload()
 {
-    return 5;
+    return 2;
 }
 function getDelayAssuntos()
 {
-    return 5;
+    return 2;
 }
 
 function getDelayOrgaos()
 {
-    return 5;
+    return 2;
 }
