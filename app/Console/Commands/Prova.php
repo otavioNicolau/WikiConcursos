@@ -39,23 +39,27 @@ class Prova extends Command
 
     public function handle()
     {
-        $concuros = Concurso::where(function ($query) {
-            $query->whereDate('next_provas_run', '<', Carbon::now()->toDateString())
-                  ->orWhereNull('next_provas_run');
-        })->limit(30000)->get();
+		for ($i = 1; $i > 0; $i++) {
+			$concuros = Concurso::where(function ($query) {
+				$query->whereDate('next_provas_run', '<', Carbon::now()->toDateString())
+					  ->orWhereNull('next_provas_run');
+			})->limit(100)->get();
 
-        foreach ($concuros as $concuro) {
-            echo "JOB Provas - Inserido com Sucesso!" . PHP_EOL;
+			foreach ($concuros as $concuro) {
+				echo $i . " - JOB Provas - Inserido com Sucesso!" . PHP_EOL;
 
-            $job = new Provas(
-                "https://www.tecconcursos.com.br/api/concursos/questoes/{$concuro->ext_id}/provas",
-                $concuro->ext_id
-            );
-            $job->onQueue('provas');
-            $this->dispatch($job);
+				$job = new Provas(
+					"https://www.tecconcursos.com.br/api/concursos/questoes/{$concuro->ext_id}/provas",
+					$concuro->ext_id
+				);
+				$job->onQueue('provas');
+				$this->dispatch($job);
 
-            $concuro->next_provas_run = Carbon::now()->addDays(5);
-            $concuro->save();
-        }
+				$concuro->next_provas_run = Carbon::now()->addDays(5);
+				$concuro->save();
+				
+			}
+			sleep(2);
+		}
     }
 }

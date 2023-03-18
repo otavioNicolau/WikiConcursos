@@ -44,23 +44,27 @@ class Questao extends Command
             '_method' => 'put'
         ];
 
-        $questoes = QuestaoModel::where(function ($query) {
-            $query->whereDate('next_run', '<', Carbon::now()->toDateString())
-                  ->orWhereNull('next_run');
-        })->limit(100000)->get();
+		for ($i = 1; $i > 0; $i++) {
+			$questoes = QuestaoModel::where(function ($query) {
+				$query->whereDate('next_run', '<', Carbon::now()->toDateString())
+					->orWhereNull('next_run');
+			})->limit(100)->get();
 
 
-        foreach ($questoes as $questao) {
-            echo "JOB QUESTÃO - Inserido com Sucesso!" . PHP_EOL;
+			foreach ($questoes as $questao) {
+				echo $i ." - JOB QUESTÃO - Inserido com Sucesso!" . PHP_EOL;
 
-            $job = new Questoes(
-                "https://www.tecconcursos.com.br/api/questoes/{$questao->ext_id}",
-                //"https://www.tecconcursos.com.br/api/questoes/{$questao->ext_id}/resolucao",
-                $data,
-                getDefaultHeaders()
-            );
-            $job->onQueue('questoes');
-            $this->dispatch($job);
-        }
+				$job = new Questoes(
+					"https://www.tecconcursos.com.br/api/questoes/{$questao->ext_id}",
+					//"https://www.tecconcursos.com.br/api/questoes/{$questao->ext_id}/resolucao",
+					$data,
+					getDefaultHeaders()
+				);
+				$job->onQueue('questoes');
+				$this->dispatch($job);
+			  
+			}
+			sleep(2);
+		}
     }
 }

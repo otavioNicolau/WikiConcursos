@@ -167,7 +167,7 @@ function getDelayEditais()
 
 function getDelayDownload()
 {
-    return 4;
+    return 0.5;
 }
 function getDelayAssuntos()
 {

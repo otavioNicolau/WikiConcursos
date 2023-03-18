@@ -114,6 +114,7 @@ class Provas implements ShouldQueue
 
             $provaModel->next_run  = Carbon::now()->addDays(5);
             $provaModel->save();
+            
             echo "A prova - {$prova['nome']} Atualizada com Sucesso!" . PHP_EOL;
         } catch (\Exception $e) {
             $this->job->fail($e);
